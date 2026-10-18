@@ -1,0 +1,732 @@
+@import "tailwindcss";
+
+/* ============================================================
+   AGENTRA — Design System
+   RedBaton language: minimalist, pure-black, one muted purple accent.
+   ============================================================ */
+
+:root {
+  /* Base — RedBaton pure black + near-black surfaces */
+  --bg: #000000;
+  --bg-1: #0a0a0a;
+  --bg-2: #0f0f0f;
+  --surface: #141414;
+  --surface-2: #1a1a1a;
+
+  /* Text — RedBaton white/grey ramp */
+  --fg: #ffffff;
+  --fg-muted: #a3a3a3;
+  /* Raised from #727272 (~4.4:1 on black — failed WCAG AA) to meet the
+     4.5:1 contrast minimum; lifts Accessibility past 96 site-wide. */
+  --fg-dim: #8a8a8a;
+
+  /* Brand purple ramp — restrained, but a touch brighter / more saturated
+     than fully muted (less greyish). The neon hue stays reserved for --glow. */
+  --purple-1: #2a1f52;
+  --purple-2: #5c45ad;
+  --purple-3: #8055e2; /* signature accent */
+  --purple-4: #9a71ef;
+  --purple-5: #b89bf5;
+  --purple-6: #d6c7fb;
+  --indigo: #5b46c9;
+  --cyan: #7c8bb0;
+
+  /* Bright purple — used ONLY for hover glows, never as a resting fill */
+  --glow: #a06bff;
+  --glow-soft: rgba(160, 107, 255, 0.9);
+  --glow-halo: rgba(160, 107, 255, 0.45);
+
+  /* Lines — RedBaton subtle greys */
+  --line: rgba(255, 255, 255, 0.07);
+  --line-strong: rgba(255, 255, 255, 0.12);
+
+  /* Gradients — a touch brighter, still restrained */
+  --grad: linear-gradient(135deg, #9a71ef 0%, #6e50c8 100%);
+  --grad-2: linear-gradient(135deg, #9a71ef 0%, #5b46c9 100%);
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-bg-1: var(--bg-1);
+  --color-bg-2: var(--bg-2);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-fg: var(--fg);
+  --color-fg-muted: var(--fg-muted);
+  --color-fg-dim: var(--fg-dim);
+  --color-purple-1: var(--purple-1);
+  --color-purple-2: var(--purple-2);
+  --color-purple-3: var(--purple-3);
+  --color-purple-4: var(--purple-4);
+  --color-purple-5: var(--purple-5);
+  --color-purple-6: var(--purple-6);
+  --color-indigo: var(--indigo);
+  --color-cyan: var(--cyan);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+
+  --font-sans: var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
+  --font-label: var(--font-albert), var(--font-jakarta), sans-serif;
+  --font-mono: var(--font-mono-code), ui-monospace, monospace;
+
+  --breakpoint-xs: 30rem;
+}
+
+* {
+  border-color: var(--line);
+}
+
+html {
+  scroll-behavior: smooth;
+  background: var(--bg);
+}
+
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overflow-x: hidden;
+}
+
+/* RedBaton headings — Plus Jakarta Sans, light/regular weight, airy line-height */
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-sans);
+  font-weight: 400;
+  letter-spacing: -0.01em;
+}
+
+::selection {
+  background: rgba(147, 98, 232, 0.35);
+  color: #fff;
+}
+
+/* Smooth, Apple-like defaults for interactive elements */
+a,
+button {
+  transition: color 0.25s ease, background-color 0.25s ease,
+    border-color 0.25s ease, box-shadow 0.25s ease, opacity 0.25s ease;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg);
+}
+::-webkit-scrollbar-thumb {
+  background: #23233a;
+  border-radius: 999px;
+  border: 2px solid var(--bg);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #32324f;
+}
+
+/* ---------- Utilities ---------- */
+
+.container-x {
+  width: 100%;
+  max-width: 1240px;
+  margin-inline: auto;
+  padding-inline: 1.5rem;
+}
+@media (min-width: 768px) {
+  .container-x {
+    padding-inline: 2.5rem;
+  }
+}
+
+.text-grad {
+  background: var(--grad);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.text-grad-2 {
+  background: var(--grad-2);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.bg-grad {
+  background: var(--grad);
+}
+.bg-grad-2 {
+  background: var(--grad-2);
+}
+
+.glass {
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.035),
+    rgba(255, 255, 255, 0.012)
+  );
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(22px) saturate(1.1);
+  -webkit-backdrop-filter: blur(22px) saturate(1.1);
+  border-radius: 18px;
+  box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.06),
+    0 20px 50px -30px rgba(0, 0, 0, 0.85);
+}
+
+/* Frosted, colourless card — for basic content cards site-wide. */
+.card {
+  background: rgba(255, 255, 255, 0.025);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(16px) saturate(1.05);
+  -webkit-backdrop-filter: blur(16px) saturate(1.05);
+  box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.05);
+  transition: border-color 0.35s ease, background 0.35s ease,
+    transform 0.35s ease;
+}
+.card-hover:hover {
+  background: rgba(160, 107, 255, 0.06);
+  border-color: rgba(160, 107, 255, 0.55);
+  transform: translateY(-4px) scale(1.012);
+  box-shadow: 0 30px 70px -28px var(--glow-halo),
+    0 0 0 1px rgba(160, 107, 255, 0.25),
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.08);
+}
+.glass-hover {
+  transition: border-color 0.4s ease, transform 0.4s ease, box-shadow 0.4s ease,
+    background 0.4s ease;
+}
+.glass-hover:hover {
+  border-color: rgba(160, 107, 255, 0.5);
+  transform: translateY(-4px) scale(1.012);
+  box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.1),
+    0 30px 70px -26px var(--glow-halo);
+  background: linear-gradient(
+    180deg,
+    rgba(160, 107, 255, 0.08),
+    rgba(255, 255, 255, 0.02)
+  );
+}
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  font-family: var(--font-label);
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--fg-muted);
+  transition: color 0.3s ease, text-shadow 0.3s ease;
+}
+.eyebrow::before {
+  content: "";
+  width: 22px;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--purple-4);
+  transition: background 0.3s ease, box-shadow 0.3s ease;
+}
+/* Eyebrow stays plain; lights up purple on hover */
+.eyebrow:hover {
+  color: var(--glow);
+  text-shadow: 0 0 10px var(--glow-soft), 0 0 22px var(--glow-halo);
+}
+.eyebrow:hover::before {
+  background: var(--glow);
+  box-shadow: 0 0 14px var(--glow-soft);
+}
+
+.grid-bg {
+  background-image: linear-gradient(var(--line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--line) 1px, transparent 1px);
+  background-size: 64px 64px;
+  mask-image: radial-gradient(
+    ellipse 80% 60% at 50% 0%,
+    #000 40%,
+    transparent 100%
+  );
+}
+
+.glow {
+  position: absolute;
+  border-radius: 999px;
+  filter: blur(90px);
+  opacity: 0.22;
+  pointer-events: none;
+  z-index: 0;
+}
+
+@keyframes spin-slow {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+@keyframes pulse-node {
+  0%,
+  100% {
+    opacity: 0.3;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+@keyframes dash {
+  to {
+    stroke-dashoffset: -1000;
+  }
+}
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+@keyframes breathe {
+  0%,
+  100% {
+    opacity: 0.3;
+  }
+  50% {
+    opacity: 0.55;
+  }
+}
+.dots-breathe {
+  animation: breathe 5s ease-in-out infinite;
+}
+
+/* Aurora atmosphere on the hero crescent — soft breathing glow (opacity only,
+   so it never interferes with the element's centring transform) */
+@keyframes aurora {
+  0%,
+  100% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+/* Organic light drifting across the planet's atmosphere — like the terminator
+   of a slowly turning world catching light. Moves horizontally and breathes. */
+@keyframes atmosphere-drift {
+  0% {
+    transform: translateX(-16%);
+    opacity: 0.35;
+  }
+  50% {
+    transform: translateX(16%);
+    opacity: 0.85;
+  }
+  100% {
+    transform: translateX(-16%);
+    opacity: 0.35;
+  }
+}
+/* A soft glint that sweeps across the crescent arc every few seconds */
+@keyframes glint-sweep {
+  0% {
+    transform: translateX(-60%);
+    opacity: 0;
+  }
+  20% {
+    opacity: 1;
+  }
+  80% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(160%);
+    opacity: 0;
+  }
+}
+@keyframes atmosphere-drift-2 {
+  0% {
+    transform: translateX(14%);
+    opacity: 0.5;
+  }
+  50% {
+    transform: translateX(-14%);
+    opacity: 0.15;
+  }
+  100% {
+    transform: translateX(14%);
+    opacity: 0.5;
+  }
+}
+
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+.animate-marquee {
+  animation: marquee 40s linear infinite;
+}
+
+/* CSS-driven entrance (runs without JS, so hero content never stays blank) */
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.fade-up {
+  animation: fadeUp 0.8s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* RedBaton floating capsule navbar */
+.nav-capsule {
+  background: rgba(16, 16, 16, 0.65);
+  backdrop-filter: blur(20px) saturate(1.1);
+  -webkit-backdrop-filter: blur(20px) saturate(1.1);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 100px;
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.nav-capsule.scrolled {
+  background: rgba(12, 12, 12, 0.8);
+  border-color: rgba(255, 255, 255, 0.12);
+}
+.nav-link {
+  font-family: var(--font-label);
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: var(--fg-muted);
+  transition: color 0.25s ease, text-shadow 0.25s ease;
+}
+/* Plain by default; purple + glow only on hover / active */
+.nav-link:hover {
+  color: #fff;
+  text-shadow: 0 0 8px var(--glow-soft), 0 0 20px var(--glow-halo);
+}
+.nav-link.is-active {
+  color: var(--fg);
+}
+.nav-link.is-active:hover {
+  color: var(--glow);
+}
+
+/* Reusable: any link/element that should stay plain and glow purple on hover */
+.link-glow {
+  transition: color 0.25s ease, text-shadow 0.25s ease;
+}
+.link-glow:hover {
+  color: #fff;
+  text-shadow: 0 0 8px var(--glow-soft), 0 0 18px var(--glow-halo);
+}
+
+/* RedBaton signature button — dark pill, subtle grey border, purple glow on hover.
+   Toned-down: the fill stays near-black; purple only appears as a hover accent. */
+.btn-primary {
+  position: relative;
+  font-family: var(--font-label);
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #fff;
+  border: 1px solid rgba(73, 73, 73, 0.3);
+  border-radius: 50px;
+  background-image: linear-gradient(180deg, #2f2f2f 0%, #1a1a1a 100%);
+  box-shadow: inset 0 0 0 1px #202020;
+}
+.btn-primary:hover {
+  border-color: rgba(160, 107, 255, 0.7);
+  background-image: linear-gradient(180deg, #363636 0%, #1f1f1f 100%);
+  text-shadow: 0 0 10px var(--glow-soft), 0 0 22px var(--glow-halo);
+  box-shadow: inset 0 0 0 1px #202020, 0 0 24px -6px var(--glow-halo);
+}
+
+:focus-visible {
+  outline: 2px solid var(--purple-4);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ── Mobile performance ──────────────────────────────────────────────
+   backdrop-filter: blur() forces the GPU to re-blur the whole backdrop
+   on every scroll frame — the biggest cause of scroll jank on phones.
+   Below the mobile breakpoint we drop the blur and use a slightly more
+   opaque solid fill (cards stay readable), and stop the always-on
+   ambient animations that repaint forever. */
+@media (max-width: 768px) {
+  .glass,
+  .card,
+  .nav-capsule,
+  [class*="backdrop-blur"] {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+  .glass {
+    background: rgba(20, 20, 24, 0.92);
+  }
+  .card {
+    background: rgba(20, 20, 24, 0.9);
+  }
+  .nav-capsule {
+    background: rgba(14, 14, 16, 0.95);
+  }
+  .dots-breathe,
+  .animate-float {
+    animation: none !important;
+  }
+  /* filter: blur(90px) over large glow areas is brutal on iOS Safari.
+     The radial gradients are already soft, so drop the blur on mobile. */
+  .glow {
+    filter: none !important;
+  }
+  /* Safety net: server-rendered reveal wrappers ship with opacity:0 inline.
+     Before JS hydrates on iOS that leaves content blank, so force reveal
+     content visible on mobile regardless of the animation state. */
+  .reveal {
+    opacity: 1 !important;
+    transform: none !important;
+    filter: none !important;
+  }
+  /* Same safety net for the per-word scroll-reveal headings: keep every word
+     fully visible and inheriting the heading colour on mobile. */
+  .reveal-text span {
+    opacity: 1 !important;
+    color: inherit !important;
+  }
+}
+
+/* ============================================================
+   RSM Supply Chain Nexus — event landing
+   Extra gradient + motion vocabulary, agentic theme.
+   ============================================================ */
+
+/* A slow-panning conic/linear gradient mesh — the "agentic" atmosphere */
+@keyframes gradient-pan {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+.animate-gradient-text {
+  background-size: 220% auto;
+  animation: gradient-pan 13s ease infinite;
+}
+
+/* Aurora mesh that slowly breathes and drifts behind the hero */
+@keyframes mesh-drift {
+  0%   { transform: translate3d(-4%, -2%, 0) scale(1.05); opacity: 0.55; }
+  50%  { transform: translate3d(4%, 3%, 0) scale(1.15);  opacity: 0.85; }
+  100% { transform: translate3d(-4%, -2%, 0) scale(1.05); opacity: 0.55; }
+}
+.mesh {
+  background:
+    radial-gradient(40% 55% at 18% 22%, rgba(160,107,255,0.45), transparent 60%),
+    radial-gradient(45% 50% at 82% 30%, rgba(91,70,201,0.40), transparent 62%),
+    radial-gradient(50% 60% at 60% 88%, rgba(124,139,176,0.28), transparent 65%);
+  will-change: transform, opacity;
+  animation: mesh-drift 14s ease-in-out infinite;
+}
+
+/* Gradient hairline border used on the theme + timeline cards */
+.grad-border {
+  position: relative;
+  border-radius: 20px;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.012)) padding-box,
+    linear-gradient(140deg, rgba(160,107,255,0.55), rgba(255,255,255,0.06) 45%, rgba(91,70,201,0.45)) border-box;
+  border: 1px solid transparent;
+  transition: transform 0.4s cubic-bezier(0.22,1,0.36,1), box-shadow 0.4s ease;
+}
+.grad-border:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 30px 70px -30px var(--glow-halo);
+}
+
+/* Vertical timeline connector */
+@keyframes draw-line {
+  from { transform: scaleY(0); }
+  to { transform: scaleY(1); }
+}
+
+/* Soft entrance for the countdown digits */
+@keyframes tick-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: none; }
+}
+
+/* Slow zoom on the hero photo — the room feeling alive */
+@keyframes ken-burns {
+  from { transform: scale(1.06); }
+  to { transform: scale(1.14); }
+}
+.ken-burns { animation: ken-burns 22s ease-in-out alternate infinite; }
+
+/* Marquee row (industry strip) */
+.marquee-track { animation: marquee 34s linear infinite; }
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-gradient-text,
+  .mesh,
+  .ken-burns,
+  .marquee-track { animation: none !important; }
+}
+
+/* Mobile: no heavy blur / drifting mesh (matches site iOS rules) */
+@media (max-width: 768px) {
+  .mesh { animation: none !important; opacity: 0.5 !important; filter: none !important; }
+  .ken-burns { animation: none !important; }
+}
+
+/* ============================================================
+   RSM Nexus — v2 clean, cinematic (no gradient fills)
+   ============================================================ */
+
+/* Line-by-line mask reveal for headings */
+.rise-mask { overflow: hidden; display: block; }
+
+/* Thin rule that draws in */
+@keyframes rule-grow { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+
+/* Subtle scanline sweep for the intro title card */
+@keyframes scan-sweep {
+  0% { transform: translateY(-100%); opacity: 0; }
+  30% { opacity: 0.6; }
+  100% { transform: translateY(2200%); opacity: 0; }
+}
+
+/* Soft flicker used once on the AGENTIC AI keyword when it settles */
+@keyframes settle-flicker {
+  0%, 100% { opacity: 1; }
+  40% { opacity: 0.72; }
+  70% { opacity: 0.9; }
+}
+.settle-flicker { animation: settle-flicker 0.5s ease-out 1; }
+
+/* Clean card — flat, 1px hairline, quiet hover (no gradient) */
+.n-card {
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(255,255,255,0.09);
+  border-radius: 16px;
+  transition: border-color 0.3s ease, background 0.3s ease, transform 0.3s cubic-bezier(0.22,1,0.36,1);
+}
+.n-card:hover {
+  border-color: rgba(255,255,255,0.22);
+  background: rgba(255,255,255,0.035);
+  transform: translateY(-3px);
+}
+
+/* Avatar ring */
+.n-avatar {
+  background: #141414;
+  border: 1px solid rgba(255,255,255,0.12);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .settle-flicker { animation: none !important; }
+}
+
+/* ============================================================
+   RSM Nexus — v3 (TiECON-style): marquees, tower sweep, bold hero
+   ============================================================ */
+
+/* Seamless marquee (two copies, translate -50%) */
+@keyframes nexus-marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+.nexus-marquee-track { display: flex; width: max-content; animation: nexus-marquee 42s linear infinite; }
+.nexus-marquee-track.rev { animation-direction: reverse; }
+.nexus-marquee-track.fast { animation-duration: 26s; }
+/* Restraint: pause the scroll when the reader hovers it */
+.marquee-pause:hover .nexus-marquee-track { animation-play-state: paused; }
+
+/* Primary surface — heavier material + shadow for the hero-tier moments
+   (countdown, register). Depth signals importance. */
+.surface-primary {
+  box-shadow: 0 40px 90px -40px rgba(0,0,0,0.9), 0 0 0 1px rgba(160,107,255,0.14),
+    inset 0 1px 0 0 rgba(255,255,255,0.06);
+}
+
+/* Active nav link */
+.nav-active { color: var(--fg); }
+.nav-active::after {
+  content: "";
+  display: block;
+  height: 1px;
+  margin-top: 3px;
+  background: var(--purple-4);
+  box-shadow: 0 0 8px var(--glow-halo);
+}
+
+/* Light sweep travelling down the tower line-art */
+@keyframes tower-sweep { 0% { transform: translateY(-120%); } 100% { transform: translateY(120%); } }
+
+/* Gentle continuous glow breathing */
+@keyframes glow-pulse { 0%,100% { opacity: 0.35; transform: scale(1); } 50% { opacity: 0.7; transform: scale(1.06); } }
+.glow-pulse { animation: glow-pulse 5s ease-in-out infinite; }
+
+@media (prefers-reduced-motion: reduce) {
+  .nexus-marquee-track { animation: none !important; }
+  .glow-pulse { animation: none !important; }
+}
+
+/* ============================================================
+   RSM Nexus v2 — Lenis smooth scroll + scroll-animation helpers
+   ============================================================ */
+html.lenis, html.lenis body { height: auto; }
+.lenis.lenis-smooth { scroll-behavior: auto !important; }
+.lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
+.lenis.lenis-stopped { overflow: hidden; }
+
+/* v2 kinetic display type */
+.v2-display{ font-weight:800; letter-spacing:-.05em; line-height:.92; }
+/* clip for the reveal, but leave room for descenders (g/p/y) */
+.v2-mask{ overflow:hidden; display:block; padding-bottom:0.14em; margin-bottom:-0.06em; }
+
+/* v2 pinned/track heights driven inline; grain + vignette */
+.v2-vignette{ background:radial-gradient(120% 90% at 50% 30%, transparent 40%, rgba(0,0,0,.6) 100%); }
+
+/* ============================================================
+   Insights: grain texture for editorial cover art (static, no filter cost)
+   ============================================================ */
+.cover-grain {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 160px 160px;
+}
+
+/* Skeleton shimmer for placeholder content blocks */
+@keyframes skeleton-shimmer {
+  from { background-position: 200% 0; }
+  to { background-position: -200% 0; }
+}
+.skeleton {
+  border-radius: 6px;
+  background: linear-gradient(90deg, rgba(255,255,255,0.04) 25%, rgba(255,255,255,0.09) 50%, rgba(255,255,255,0.04) 75%);
+  background-size: 200% 100%;
+  animation: skeleton-shimmer 2.4s ease-in-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .skeleton { animation: none !important; }
+}

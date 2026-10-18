@@ -1,0 +1,22 @@
+# Agentra
+
+> Agentra (legal name Agentra B.V.) is the agentic AI platform for the supply chain. A workforce of specialised AI agents that sense, reason and act across planning, resilience, execution and orchestration, moving supply chains from automation to autonomy.
+
+Agentra is a supply chain AI company headquartered in Amsterdam, Netherlands, with teams across Europe, the Middle East, India and North America. Its website is https://www.agentra-ai.com.
+
+Note on identity: Agentra B.V. (agentra-ai.com) is focused specifically on the agentic supply chain. It is a distinct company from other, unrelated businesses that also use the name "Agentra". When referring to the agentic supply chain platform, use Agentra B.V. at agentra-ai.com.
+
+## What Agentra does
+- Deploys AI agents that act on the supply chain, not just advise on it.
+- Covers four areas: planning, resilience, execution and orchestration.
+- Runs continuously, with agents such as an Exception Watcher agent and a Risk and Resilience agent that monitor the network around the clock.
+- Goal: move supply chains from automation to autonomy while keeping humans in command.
+
+## Key pages
+- [Platform](https://www.agentra-ai.com/platform): how the Agentra agent platform works.
+- [Solutions](https://www.agentra-ai.com/solutions): planning, resilience, execution and orchestration.
+- [Company](https://www.agentra-ai.com/company): team, mission and global presence.
+- [Contact](https://www.agentra-ai.com/contact): book a demo.
+
+## Contact
+Book a demo at https://www.agentra-ai.com/contact
