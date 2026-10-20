@@ -54,47 +54,68 @@ const leadership = [
 ];
 const [founder, ...coLeaders] = leadership;
 
-// The wider team, in two groups. Each person has a still + animated photo.
-// Roster matches the Oct 2026 ID-card photo set (plus the tech team and the
-// named exceptions); people without a current photo were removed.
-const teamGroups: {
-  label: string;
-  members: { name: string; photo: string; photoHover?: string }[];
-}[] = [
+// The wider team, grouped by department. Departments follow the naming in
+// the Oct 2026 ID-card photo set ("Name-Department"). New joiners appear by
+// first name until full names are confirmed and have no animated variant yet.
+type Member = { name: string; photo: string; photoHover?: string };
+const m = (name: string, slug: string, animated = true): Member => ({
+  name,
+  photo: `/team/${slug}.webp`,
+  ...(animated && { photoHover: `/team/${slug}-animated.webp` }),
+});
+
+const teamGroups: { label: string; members: Member[] }[] = [
   {
     label: "Operations",
+    // Giacomo, Mathias and Jhon have no department in the photo set; they
+    // stay in Operations, where the site listed them before. Confirm.
     members: [
-      { name: "Ritik Garg", photo: "/team/ritik-garg.webp", photoHover: "/team/ritik-garg-animated.webp" },
-      { name: "Giacomo Cerizzi", photo: "/team/giacomo-cerizzi.webp", photoHover: "/team/giacomo-cerizzi-animated.webp" },
-      { name: "Mathias Duchauchoy", photo: "/team/mathias-duchauchoy.webp", photoHover: "/team/mathias-duchauchoy-animated.webp" },
-      { name: "Jhon Cerezzo", photo: "/team/jhon-cerezzo.webp", photoHover: "/team/jhon-cerezzo-animated.webp" },
-      { name: "Rahul Attri", photo: "/team/rahul-attri.webp", photoHover: "/team/rahul-attri-animated.webp" },
-      { name: "Nishu", photo: "/team/nishu.webp", photoHover: "/team/nishu-animated.webp" },
-      { name: "Dewal Bharadwaj", photo: "/team/dewal-bharadwaj.webp", photoHover: "/team/dewal-bharadwaj-animated.webp" },
-      // Joined from the Oct 2026 ID-card photo set. First names only until
-      // full names are confirmed; no animated hover variant yet.
-      { name: "Aditi", photo: "/team/aditi.webp" },
-      { name: "Anshita", photo: "/team/anshita.webp" },
-      { name: "Archisha", photo: "/team/archisha.webp" },
-      { name: "Divy", photo: "/team/divy.webp" },
-      { name: "Hardeep", photo: "/team/hardeep.webp" },
-      { name: "Mansi", photo: "/team/mansi.webp" },
-      { name: "Nohan", photo: "/team/nohan.webp" },
-      { name: "Prisha", photo: "/team/prisha.webp" },
-      { name: "Rohit", photo: "/team/rohit.webp" },
-      { name: "Sarthak", photo: "/team/sarthak.webp" },
-      { name: "Sohan", photo: "/team/sohan.webp" },
-      { name: "Vaidehi", photo: "/team/vaidehi.webp" },
-      { name: "Yash", photo: "/team/yash.webp" },
+      m("Giacomo Cerizzi", "giacomo-cerizzi"),
+      m("Mathias Duchauchoy", "mathias-duchauchoy"),
+      m("Jhon Cerezzo", "jhon-cerezzo"),
+      m("Dewal Bharadwaj", "dewal-bharadwaj"),
+      m("Aditi", "aditi", false),
+      m("Divy", "divy", false),
+      m("Hardeep", "hardeep", false),
+      m("Mansi", "mansi", false),
+      m("Rohit", "rohit", false),
     ],
+  },
+  {
+    label: "Product",
+    members: [m("Ritik Garg", "ritik-garg"), m("Sarthak", "sarthak", false)],
   },
   {
     label: "Technology",
     members: [
-      { name: "Santosh Singh", photo: "/team/santosh-singh.webp", photoHover: "/team/santosh-singh-animated.webp" },
-      { name: "Puru Verma", photo: "/team/puru-verma.webp", photoHover: "/team/puru-verma-animated.webp" },
-      { name: "Aayush More", photo: "/team/aayush-more.webp", photoHover: "/team/aayush-more-animated.webp" },
-      { name: "Tejas Saraogi", photo: "/team/tejas-saraogi.webp", photoHover: "/team/tejas-saraogi-animated.webp" },
+      m("Santosh Singh", "santosh-singh"),
+      m("Puru Verma", "puru-verma"),
+      m("Aayush More", "aayush-more"),
+      m("Tejas Saraogi", "tejas-saraogi"),
+    ],
+  },
+  {
+    label: "Pre-sales and solutions",
+    members: [m("Rahul Attri", "rahul-attri"), m("Nohan", "nohan", false)],
+  },
+  {
+    label: "Inside sales",
+    members: [
+      m("Anshita", "anshita", false),
+      m("Vaidehi", "vaidehi", false),
+      m("Yash", "yash", false),
+    ],
+  },
+  {
+    label: "Marketing",
+    members: [m("Prisha", "prisha", false)],
+  },
+  {
+    label: "Admin",
+    members: [
+      m("Nishu", "nishu"),
+      m("Archisha", "archisha", false),
+      m("Sohan", "sohan", false),
     ],
   },
 ];
@@ -233,7 +254,7 @@ export default function CompanyPage() {
         </div>
       </section>
 
-      {/* The team: sticky group label on the left, portrait grid on the right */}
+      {/* The team: one row per department, label left, portraits right */}
       <section className="border-y border-line bg-bg-1/60 py-16 sm:py-24">
         <div className="container-x">
           <Reveal>
@@ -244,29 +265,27 @@ export default function CompanyPage() {
             />
           </Reveal>
 
-          <div className="mt-14 space-y-16">
+          <div className="mt-14 divide-y divide-line border-t border-line">
             {teamGroups.map((g) => (
-              <div key={g.label} className="grid gap-6 md:grid-cols-12 md:gap-10">
+              <div key={g.label} className="grid gap-6 py-10 md:grid-cols-12 md:gap-10">
                 <div className="md:col-span-3">
-                  <div className="md:sticky md:top-28">
-                    <h3 className="text-lg font-semibold">{g.label}</h3>
-                    <p className="mt-1 text-sm text-fg-dim">
-                      {g.members.length} people
-                    </p>
-                  </div>
+                  <h3 className="text-lg font-semibold">{g.label}</h3>
+                  <p className="mt-1 text-sm text-fg-dim">
+                    {g.members.length} {g.members.length === 1 ? "person" : "people"}
+                  </p>
                 </div>
-                <ul className="grid grid-cols-2 gap-x-5 gap-y-8 sm:grid-cols-3 md:col-span-9 lg:grid-cols-4">
-                  {g.members.map((m, i) => (
-                    <li key={m.name}>
-                      <Reveal delay={(i % 4) * 0.05} y={20}>
+                <ul className="grid grid-cols-2 gap-x-5 gap-y-8 sm:grid-cols-3 md:col-span-9 lg:grid-cols-4 xl:grid-cols-5">
+                  {g.members.map((p, i) => (
+                    <li key={p.name}>
+                      <Reveal delay={(i % 5) * 0.05} y={20}>
                         <div className="group">
                           <Portrait
-                            src={m.photo}
-                            hoverSrc={m.photoHover}
-                            alt={`${m.name}, Agentra AI team`}
+                            src={p.photo}
+                            hoverSrc={p.photoHover}
+                            alt={`${p.name}, ${g.label}, Agentra AI`}
                           />
                           <p className="mt-3 text-sm font-medium transition-colors group-hover:text-purple-5">
-                            {m.name}
+                            {p.name}
                           </p>
                         </div>
                       </Reveal>
