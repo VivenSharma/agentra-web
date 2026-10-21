@@ -66,13 +66,17 @@ const m = (name: string, slug: string, animated = true): Member => ({
 
 const teamGroups: { label: string; members: Member[] }[] = [
   {
-    label: "Operations",
-    // Giacomo, Mathias and Jhon have no department in the photo set; they
-    // stay in Operations, where the site listed them before. Confirm.
+    // Not in the photo set; department confirmed by the manager (Oct 2026).
+    label: "Co-founders and market development",
     members: [
       m("Giacomo Cerizzi", "giacomo-cerizzi"),
       m("Mathias Duchauchoy", "mathias-duchauchoy"),
       m("Jhon Cerezzo", "jhon-cerezzo"),
+    ],
+  },
+  {
+    label: "Operations",
+    members: [
       m("Dewal Bharadwaj", "dewal-bharadwaj"),
       m("Aditi", "aditi", false),
       m("Divy", "divy", false),
