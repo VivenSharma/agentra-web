@@ -75,7 +75,7 @@ const teamGroups: { label: string; members: Member[] }[] = [
     ],
   },
   {
-    label: "Operations",
+    label: "Delivery",
     members: [
       m("Dewal Bharadwaj", "dewal-bharadwaj"),
       m("Aditi", "aditi", false),
