@@ -45,7 +45,7 @@ export function Connectors() {
             eyebrow="Built on what you have"
             title="Connect everything."
             accent="Act anywhere."
-            sub="Your fragmented estate converges into one autonomy layer. 900+ connectors, zero rip-and-replace."
+            sub="Your fragmented estate converges into one autonomy layer. 900+ connectors. Works with what you have."
           />
         </Reveal>
 

@@ -9,7 +9,7 @@ export const site = {
   domain: "agentra-ai.com",
   tagline: "From automation to autonomy.",
   hero:
-    "A workforce of specialized agents that sense, reason, and act across your supply chain, powered by a proprietary ontology layer. Vertical, not horizontal. Probabilistic, not deterministic.",
+    "A workforce of specialised agents that sense, reason, and act across your supply chain, powered by a proprietary ontology layer. Vertical, not horizontal. Probabilistic, not deterministic.",
   category: "The agentic supply chain",
 };
 
@@ -88,7 +88,7 @@ export const marketplace = [
     icon: "network",
     name: "Orchestrators",
     scope: "Coordination",
-    desc: "Coordinate specialized agents, resolve conflicts, and align cross-functional decisions.",
+    desc: "Coordinate specialised agents, resolve conflicts, and align cross-functional decisions.",
   },
   {
     icon: "clock",
@@ -256,7 +256,7 @@ export const trust = {
   ],
   llms: ["OpenAI", "Anthropic", "Google", "Meta", "DeepSeek"],
   clouds: ["Azure", "AWS", "GCP"],
-  compliance: ["GDPR", "ISO 27001"],
+  compliance: ["GDPR", "ISO 27001", "ISO 14001"],
   guarantee:
     "16-week delivery guarantee. If we are late by a day, you do not pay.",
 };
@@ -321,15 +321,15 @@ export const faqs = [
   },
   {
     q: "Do we have to replace SAP, Oracle, or our TMS?",
-    a: "No. Agentra is ERP-agnostic and sits on top of the systems you already run through 900+ integrations. There is no rip-and-replace.",
+    a: "No. Agentra is ERP-agnostic and sits on top of the systems you already run through 900+ connectors. It works with what you have.",
   },
   {
     q: "How fast can we see value?",
-    a: "The first production agent is typically live in 6 to 8 weeks against a real outcome, backed by a 16-week delivery guarantee. Then we expand from there.",
+    a: "The first production agent is typically live in 6–8 weeks against a real outcome, backed by a 16-week delivery guarantee. Then we expand from there.",
   },
   {
     q: "How do you keep this safe and compliant?",
-    a: "Every agent is governed by design: human-in-the-loop, explainable, and fully auditable. You set the autonomy level per workflow, from Suggest to Co-pilot to Autopilot. Agentra is GDPR-aligned and ISO 27001 oriented.",
+    a: "Every agent is governed by design: human-in-the-loop, explainable, and fully auditable. You set the autonomy level per workflow, from Suggest to Co-pilot to Autopilot. Agentra is GDPR-aligned and certified to ISO 27001 and ISO 14001.",
   },
   {
     q: "Is Agentra tied to one model or cloud?",

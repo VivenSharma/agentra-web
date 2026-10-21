@@ -10,7 +10,7 @@ export function AgentMarketplace() {
         <Reveal>
           <SectionHeader
             eyebrow="Agent marketplace"
-            title="A workforce of specialized"
+            title="A workforce of specialised"
             accent="supply chain agents."
             sub="Deploy the agents you need, coordinated by orchestrators, all reasoning on the same ontology layer."
           />

@@ -124,7 +124,7 @@ export const posts: Post[] = [
     slug: "building-on-your-estate",
     title: "Building on the estate you already run",
     excerpt:
-      "ERP-agnostic integration across SAP, Oracle, Dynamics 365 and your TMS and WMS, without a rip and replace.",
+      "ERP-agnostic integration across SAP, Oracle, Dynamics 365 and your TMS and WMS. It works with what you have.",
     category: "Integration",
     author: team,
     date: "2026-08-28",
@@ -186,7 +186,7 @@ export const placeholderBody: BodyBlock[] = [
   { type: "h2", id: "the-result", text: "The result" },
   {
     type: "stat",
-    value: "6 to 8 weeks",
+    value: "6–8 weeks",
     label: "from first use case to a live agent",
     source: "Agentra deployment model",
   },

@@ -264,8 +264,8 @@ export default function CompanyPage() {
           <Reveal>
             <SectionHeader
               align="left"
-              title="The people running"
-              accent="the agents."
+              title="Meet the agents"
+              accent="behind your agents."
             />
           </Reveal>
 

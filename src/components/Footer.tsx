@@ -54,8 +54,8 @@ export function Footer() {
           <div className="max-w-xs">
             <Logo />
             <p className="mt-4 text-sm leading-relaxed text-fg-muted">
-              The agentic AI platform for supply chains. Agents that act, not
-              just advise.
+              The agentic layer for supply chain. Agents that act, with your
+              team in command.
             </p>
             <a
               href="https://www.linkedin.com/company/agentra-ai-bv"

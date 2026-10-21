@@ -11,20 +11,23 @@ export function Hero() {
       <div className="grid-bg absolute inset-0 opacity-30" />
 
       <div className="container-x relative z-10">
-        <div className="mx-auto max-w-4xl text-center">
+        <div className="mx-auto max-w-5xl text-center">
+          {/* Headline and tagline are fixed by the Brand & Marketing Playbook
+              (Oct 2026). Do not change without the founders. */}
           <h1
-            className="fade-up mx-auto max-w-3xl text-balance text-[2.5rem] font-light leading-[1.04] tracking-[-0.025em] sm:text-5xl md:text-[3.7rem]"
+            className="fade-up mx-auto max-w-5xl text-balance text-[2.3rem] font-light leading-[1.08] tracking-[-0.025em] sm:text-5xl md:text-[3.25rem]"
             style={{ animationDelay: "0.08s" }}
           >
-            An agentic supply chain with a mind of its own.
+            Your supply chain, acting on what it knows.{" "}
+            <span className="text-purple-6 md:block">You stay in command.</span>
           </h1>
 
           <p
             className="fade-up mx-auto mt-7 max-w-xl text-lg leading-relaxed text-fg-muted"
             style={{ animationDelay: "0.16s" }}
           >
-            Specialised agents that sense, decide, and act across your supply
-            chain. Always on, always in your command.
+            The agentic layer for supply chain. First agent live in{" "}
+            <span className="whitespace-nowrap">6–8 weeks.</span>
           </p>
 
           <div
