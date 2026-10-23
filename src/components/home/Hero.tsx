@@ -55,11 +55,17 @@ export function Hero() {
           className="absolute inset-0 h-full w-full object-cover"
           style={{
             objectPosition: "center 38%",
-            // fade the arc's ends into the black background on both sides
+            mixBlendMode: "screen",
+            // fade the arc's ends on both sides and its top edge; screen
+            // blending drops the photo's black so the page backdrop shows
+            // through. Masks live on the img (a mask on the wrapper would
+            // isolate it and cancel the blend).
             maskImage:
-              "linear-gradient(to right, transparent 0%, #000 18%, #000 82%, transparent 100%)",
+              "linear-gradient(to right, transparent 0%, #000 18%, #000 82%, transparent 100%), linear-gradient(to bottom, transparent 0%, #000 30%)",
             WebkitMaskImage:
-              "linear-gradient(to right, transparent 0%, #000 18%, #000 82%, transparent 100%)",
+              "linear-gradient(to right, transparent 0%, #000 18%, #000 82%, transparent 100%), linear-gradient(to bottom, transparent 0%, #000 30%)",
+            maskComposite: "intersect",
+            WebkitMaskComposite: "source-in",
           }}
         />
         {/* soft breathing glow over the arc */}
@@ -72,8 +78,6 @@ export function Hero() {
             animation: "aurora 6s ease-in-out infinite",
           }}
         />
-        {/* top fade so the image dissolves into the section above */}
-        <div className="absolute inset-x-0 top-0 h-28 bg-gradient-to-b from-bg to-transparent" />
       </div>
     </section>
   );

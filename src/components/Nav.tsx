@@ -8,6 +8,11 @@ import { Menu, X, ChevronDown } from "lucide-react";
 import { Logo } from "./Logo";
 import { CoverArt } from "./insights/CoverArt";
 import { insightDoors } from "@/lib/insights-nav";
+import { sectors } from "@/lib/sectors";
+
+// Customer stories have their own top-level item, so the Resources panel
+// only carries the reading and events doors.
+const resourceDoors = insightDoors.filter((d) => d.href !== "/customers");
 
 type NavItem = {
   label: string;
@@ -17,6 +22,9 @@ type NavItem = {
   mega?: boolean;
 };
 
+// Top nav per the Homepage Changes Checklist (Oct 2026, item 6):
+// Platform, Solutions, Industries, Customers, Resources, Company, Trust,
+// with Book a demo as the only button.
 const navItems: NavItem[] = [
   { label: "Platform", href: "/platform" },
   {
@@ -29,16 +37,21 @@ const navItems: NavItem[] = [
       { label: "Orchestration", href: "/solutions/orchestration", desc: "Coordinate every agent" },
     ],
   },
-  // Agents page removed — agent detail now lives inside each Solutions subpage.
-  // Insights replaces the hidden Resources item: three doors (blog, events,
-  // customer stories), as in the website proposal. Pages are noindex for now.
   {
-    label: "Insights",
+    label: "Industries",
+    href: "/industries",
+    children: sectors.map((s) => ({ label: s.name, href: `/industries/${s.slug}` })),
+  },
+  { label: "Customers", href: "/customers" },
+  // Blog and events; pages stay noindex until content lands.
+  {
+    label: "Resources",
     href: "/resources",
     mega: true,
-    children: insightDoors.map((d) => ({ label: d.label, href: d.href, desc: d.desc })),
+    children: resourceDoors.map((d) => ({ label: d.label, href: d.href, desc: d.desc })),
   },
   { label: "Company", href: "/company" },
+  { label: "Trust", href: "/trust" },
 ];
 
 export function Nav() {
@@ -66,13 +79,13 @@ export function Nav() {
     <header className="pointer-events-none fixed inset-x-0 top-0 z-50">
       <div className="mx-auto w-full max-w-[1440px] px-4 pt-4 sm:px-6">
         <nav
-          className={`nav-capsule pointer-events-auto grid h-16 grid-cols-[auto_1fr_auto] items-center px-5 md:px-8 ${
+          className={`nav-capsule pointer-events-auto grid h-16 grid-cols-[auto_1fr_auto] items-center px-5 xl:px-8 ${
             scrolled ? "scrolled" : ""
           }`}
         >
           <Logo />
 
-          <div className="hidden items-center justify-center gap-9 md:flex">
+          <div className="hidden items-center justify-center gap-6 xl:flex 2xl:gap-9">
             {navItems.map((item) => (
               <div
                 key={item.href}
@@ -82,7 +95,7 @@ export function Nav() {
               >
                 <Link
                   href={item.href}
-                  className={`nav-link inline-flex items-center gap-1 ${
+                  className={`nav-link inline-flex items-center gap-1 whitespace-nowrap ${
                     pathname.startsWith(item.href) && item.href !== "/"
                       ? "is-active"
                       : ""
@@ -103,12 +116,12 @@ export function Nav() {
                         exit={{ opacity: 0, y: 8 }}
                         transition={{ duration: 0.18 }}
                         className={`absolute left-1/2 top-full -translate-x-1/2 pt-3 ${
-                          item.mega ? "w-[520px]" : "w-64"
+                          item.mega ? "w-[380px]" : "w-64"
                         }`}
                       >
                         {item.mega ? (
-                          <div className="grid grid-cols-3 gap-2 rounded-2xl border border-line bg-surface p-2 shadow-2xl shadow-black/60">
-                            {insightDoors.map((d) => (
+                          <div className="grid grid-cols-2 gap-2 rounded-2xl border border-line bg-surface p-2 shadow-2xl shadow-black/60">
+                            {resourceDoors.map((d) => (
                               <Link
                                 key={d.href}
                                 href={d.href}
@@ -135,9 +148,9 @@ export function Nav() {
                             <Link
                               key={c.href}
                               href={c.href}
-                              className="block rounded-xl px-3 py-2.5 transition-colors hover:bg-white/5"
+                              className="group block rounded-xl px-3 py-2.5 transition-colors hover:bg-purple-3/10"
                             >
-                              <div className="text-sm font-semibold text-fg">
+                              <div className="text-sm font-semibold text-fg transition-colors group-hover:text-purple-6">
                                 {c.label}
                               </div>
                               {c.desc && (
@@ -160,13 +173,13 @@ export function Nav() {
           <div className="flex items-center justify-end gap-3">
             <Link
               href="/contact"
-              className="btn-primary hidden items-center px-6 py-2.5 text-sm font-semibold transition-all hover:-translate-y-0.5 active:scale-[0.98] md:inline-flex"
+              className="btn-primary hidden items-center whitespace-nowrap px-6 py-2.5 text-sm font-semibold transition-all hover:-translate-y-0.5 active:scale-[0.98] xl:inline-flex"
             >
               Book a demo
             </Link>
 
             <button
-              className="inline-flex h-10 w-10 items-center justify-center rounded-lg border border-line text-fg transition-colors hover:border-purple-4/50 hover:text-fg md:hidden"
+              className="inline-flex h-10 w-10 items-center justify-center rounded-lg border border-line text-fg transition-colors hover:border-purple-4/50 hover:text-fg xl:hidden"
               onClick={() => setOpen((v) => !v)}
               aria-label="Toggle menu"
             >
@@ -178,7 +191,7 @@ export function Nav() {
 
       {/* Mobile menu */}
       {open && (
-        <div className="pointer-events-auto container-x mt-3 md:hidden">
+        <div className="pointer-events-auto container-x mt-3 xl:hidden">
           <div
             className="nav-capsule flex max-h-[80vh] flex-col gap-1 overflow-y-auto px-4 py-4"
             style={{ borderRadius: 24 }}

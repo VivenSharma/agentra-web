@@ -6,12 +6,13 @@
    ============================================================ */
 
 :root {
-  /* Base — RedBaton pure black + near-black surfaces */
-  --bg: #000000;
-  --bg-1: #0a0a0a;
-  --bg-2: #0f0f0f;
-  --surface: #141414;
-  --surface-2: #1a1a1a;
+  /* Base: a soft violet-tinted near-black (was pure #000, which read as a
+     flat void). Each step keeps the same gap so card hierarchy holds. */
+  --bg: #0a090d;
+  --bg-1: #0f0e13;
+  --bg-2: #131217;
+  --surface: #18171d;
+  --surface-2: #1e1d24;
 
   /* Text — RedBaton white/grey ramp */
   --fg: #ffffff;
@@ -72,8 +73,12 @@
   --breakpoint-xs: 30rem;
 }
 
-* {
-  border-color: var(--line);
+/* In the base layer so Tailwind border-colour utilities (incl. hover:)
+   can override it; unlayered, it beat every utility. */
+@layer base {
+  * {
+    border-color: var(--line);
+  }
 }
 
 html {
@@ -81,8 +86,9 @@ html {
   background: var(--bg);
 }
 
+/* body stays transparent so the fixed ambient layers below can sit between
+   the page colour (on html) and the content */
 body {
-  background: var(--bg);
   color: var(--fg);
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
@@ -729,4 +735,155 @@ html.lenis, html.lenis body { height: auto; }
 }
 @media (prefers-reduced-motion: reduce) {
   .skeleton { animation: none !important; }
+}
+
+/* ============================================================
+   Depth + cursor light (Oct 2026 feedback: "pages look too flat")
+   Any .spotlight / .card-hover / .glass-hover surface gets a soft purple
+   light that follows the mouse, plus a lit border under the cursor.
+   --mx/--my are set by components/Spotlight.tsx. Mouse only.
+   ============================================================ */
+.spotlight,
+.card-hover,
+.glass-hover {
+  position: relative;
+  isolation: isolate;
+}
+.spotlight::before,
+.card-hover::before,
+.glass-hover::before,
+.spotlight::after,
+.card-hover::after,
+.glass-hover::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.35s ease;
+}
+/* inner light, painted under the content */
+.spotlight::before,
+.card-hover::before,
+.glass-hover::before {
+  z-index: -1;
+  background: radial-gradient(
+    380px circle at var(--mx, 50%) var(--my, 50%),
+    rgba(160, 107, 255, 0.13),
+    transparent 60%
+  );
+}
+/* lit border: a 1px ring masked out of the same gradient */
+.spotlight::after,
+.card-hover::after,
+.glass-hover::after {
+  padding: 1px;
+  background: radial-gradient(
+    220px circle at var(--mx, 50%) var(--my, 50%),
+    rgba(214, 199, 251, 0.75),
+    transparent 70%
+  );
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+}
+.spotlight:hover::before,
+.card-hover:hover::before,
+.glass-hover:hover::before,
+.spotlight:hover::after,
+.card-hover:hover::after,
+.glass-hover:hover::after {
+  opacity: 1;
+}
+
+/* Raised surface: a lifted tile with a top highlight and a tinted shadow,
+   so key blocks sit above the black page instead of flat on it */
+.raised {
+  background: linear-gradient(180deg, #121014 0%, #0b0a0d 100%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.07),
+    0 24px 60px -32px rgba(90, 71, 148, 0.55);
+  transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 0.35s ease, box-shadow 0.35s ease;
+}
+.raised:hover {
+  transform: translateY(-4px);
+  border-color: rgba(160, 107, 255, 0.45);
+  box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.1),
+    0 34px 80px -30px var(--glow-halo);
+}
+
+/* Integration logo marquee: two copies of the row, translate -50%, faded
+   edges, paused while hovered so a logo can be read */
+.logo-marquee {
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+}
+.logo-track {
+  display: flex;
+  width: max-content;
+  animation: marquee 38s linear infinite;
+}
+.logo-marquee:hover .logo-track {
+  animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .logo-track { animation: none !important; }
+  .raised:hover { transform: none; }
+}
+@media (max-width: 768px) {
+  .raised { box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.07); }
+}
+
+/* ============================================================
+   Ambient backdrop: a faint purple light at the top and corners plus a
+   fine film grain, fixed behind all content, so the dark background has
+   depth instead of reading as flat black. Fixed + pointer-events none,
+   so it never repaints on scroll.
+   ============================================================ */
+body::before,
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+}
+body::before {
+  background:
+    radial-gradient(1200px 620px at 50% -12%, rgba(128, 85, 226, 0.11), transparent 70%),
+    radial-gradient(900px 700px at 105% 105%, rgba(91, 70, 201, 0.07), transparent 70%),
+    radial-gradient(800px 640px at -5% 55%, rgba(124, 139, 176, 0.045), transparent 70%);
+}
+body::after {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 180px 180px;
+  opacity: 0.035;
+  mix-blend-mode: overlay;
+}
+
+/* Homepage problem statement: disruption signals on the world map */
+@keyframes hub-ring {
+  0% { transform: scale(0.2); opacity: 0; }
+  12% { opacity: 0.45; }
+  60%, 100% { transform: scale(1); opacity: 0; }
+}
+@keyframes hub-dot {
+  0%, 100% { opacity: 0.2; }
+  10%, 40% { opacity: 0.6; }
+}
+.hub-ring,
+.hub-dot {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+  animation-iteration-count: infinite;
+}
+.hub-ring { opacity: 0; animation-name: hub-ring; }
+.hub-dot { opacity: 0.2; animation-name: hub-dot; }
+@media (prefers-reduced-motion: reduce) {
+  .hub-ring { animation: none !important; opacity: 0.2; transform: scale(0.6); }
+  .hub-dot { animation: none !important; opacity: 0.45; }
 }

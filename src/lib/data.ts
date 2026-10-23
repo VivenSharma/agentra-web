@@ -332,7 +332,7 @@ export const planeModules = [
 ];
 
 export const platformStats = [
-  { value: "900+", label: "Integrations" },
+  { value: "1000+", label: "Integrations" },
   { value: "Minutes", label: "Sense to action" },
   { value: "3", label: "Autonomy levels" },
   { value: "Always", label: "Audit-ready" },

@@ -10,7 +10,7 @@ import { CTA } from "@/components/CTA";
 export const metadata: Metadata = {
   title: "Platform",
   description:
-    "Every signal in, one autonomy layer out. 900+ integrations, a proprietary ontology, a multi-agent engine, and governance by design.",
+    "Every signal in, one autonomy layer out. 1000+ integrations, a proprietary ontology, a multi-agent engine, and governance by design.",
 };
 
 export default function PlatformPage() {

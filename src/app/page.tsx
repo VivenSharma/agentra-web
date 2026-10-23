@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Hero } from "@/components/home/Hero";
 import { Manifesto, TheShift } from "@/components/home/MinimalHome";
-import { ClientSectors, ThreeMessages, TrustFacts } from "@/components/home/Proof";
+import { ClientSectors, IntegrationLogos, ThreeMessages, TrustFacts } from "@/components/home/Proof";
 import { CTA } from "@/components/CTA";
 
 export const metadata: Metadata = {
@@ -16,6 +16,7 @@ export default function Home() {
     <>
       <Hero />
       <ClientSectors />
+      <IntegrationLogos />
       <Manifesto />
       <TheShift />
       <ThreeMessages />

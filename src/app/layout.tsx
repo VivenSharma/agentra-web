@@ -4,6 +4,7 @@ import "./globals.css";
 import { Nav } from "@/components/Nav";
 import { Footer } from "@/components/Footer";
 import { ScrollProgress } from "@/components/ScrollProgress";
+import { Spotlight } from "@/components/Spotlight";
 
 // Body + headings — the RedBaton primary typeface
 const jakarta = Plus_Jakarta_Sans({
@@ -76,7 +77,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#000000",
+  themeColor: "#0a090d",
   colorScheme: "dark",
 };
 
@@ -88,7 +89,7 @@ export default function RootLayout({
       lang="en"
       className={`${jakarta.variable} ${albert.variable} ${mono.variable} h-full antialiased`}
     >
-      <body className="flex min-h-full flex-col bg-bg">
+      <body className="flex min-h-full flex-col">
         {/* Structured data — helps Google understand the brand + site */}
         <script
           type="application/ld+json"
@@ -144,6 +145,7 @@ export default function RootLayout({
           }}
         />
         <ScrollProgress />
+        <Spotlight />
         <Nav />
         <main className="flex-1">{children}</main>
         <Footer />

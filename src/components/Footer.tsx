@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Logo } from "./Logo";
-import { ArrowUpRight } from "lucide-react";
+import { ArrowUpRight, ShieldCheck } from "lucide-react";
 
 function LinkedinIcon({ className = "" }: { className?: string }) {
   return (
@@ -33,11 +33,22 @@ const cols = [
     ],
   },
   {
+    title: "Industries",
+    links: [
+      { label: "Energy technology", href: "/industries/energy-technology" },
+      { label: "Medical technology", href: "/industries/medical-technology" },
+      { label: "Semiconductors", href: "/industries/semiconductors" },
+      { label: "Agriculture", href: "/industries/agriculture" },
+    ],
+  },
+  {
     title: "Company",
     links: [
       { label: "About", href: "/company" },
+      { label: "Customers", href: "/customers" },
+      { label: "Resources", href: "/resources" },
+      { label: "Trust", href: "/trust" },
       { label: "Contact", href: "/contact" },
-      { label: "Book a demo", href: "/contact" },
     ],
   },
 ];
@@ -50,7 +61,7 @@ export function Footer() {
   return (
     <footer className="relative mt-auto border-t border-line">
       <div className="container-x py-16">
-        <div className="grid gap-12 md:grid-cols-[1.4fr_1fr_1fr_1fr]">
+        <div className="grid gap-12 sm:grid-cols-2 md:grid-cols-[1.4fr_1fr_1fr_1fr_1fr]">
           <div className="max-w-xs">
             <Logo />
             <p className="mt-4 text-sm leading-relaxed text-fg-muted">
@@ -89,8 +100,26 @@ export function Footer() {
           ))}
         </div>
 
+        {/* Certifications, linked to the Trust page (checklist item 4) */}
+        <div className="mt-14 flex flex-wrap gap-3">
+          {[
+            { name: "ISO 27001", label: "Information security" },
+            { name: "ISO 14001", label: "Environmental management" },
+          ].map((b) => (
+            <Link
+              key={b.name}
+              href="/trust#certifications"
+              className="spotlight group inline-flex items-center gap-3 rounded-full border border-line-strong py-2 pl-3 pr-5 transition-colors duration-300 hover:border-purple-4/60"
+            >
+              <ShieldCheck className="h-5 w-5 text-purple-5 transition-colors group-hover:text-purple-6" strokeWidth={1.5} aria-hidden />
+              <span className="text-sm font-semibold text-fg">{b.name}</span>
+              <span className="text-xs text-fg-dim transition-colors group-hover:text-fg-muted">{b.label}</span>
+            </Link>
+          ))}
+        </div>
+
         {/* Legal */}
-        <div className="mt-14 flex flex-wrap items-center gap-x-6 gap-y-3 border-t border-line pt-8">
+        <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-3 border-t border-line pt-8">
           {[
             { label: "Privacy Policy", href: "/privacy" },
             { label: "Terms of Service", href: "/terms" },

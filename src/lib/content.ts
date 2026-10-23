@@ -16,8 +16,11 @@ export const site = {
 export const nav = [
   { label: "Platform", href: "/platform" },
   { label: "Solutions", href: "/solutions" },
-  { label: "Company", href: "/company" },
+  { label: "Industries", href: "/industries" },
+  { label: "Customers", href: "/customers" },
   { label: "Resources", href: "/resources" },
+  { label: "Company", href: "/company" },
+  { label: "Trust", href: "/trust" },
 ];
 
 /* ---------- Problem statement (3 pillars) ---------- */
@@ -160,7 +163,7 @@ export const stack = [
   {
     id: "L1",
     name: "Enterprise Systems",
-    desc: "900+ integrations across SAP, Oracle, Microsoft, and your TMS and WMS.",
+    desc: "1000+ integrations across SAP, Oracle, Microsoft, and your TMS and WMS.",
   },
 ];
 
@@ -321,7 +324,7 @@ export const faqs = [
   },
   {
     q: "Do we have to replace SAP, Oracle, or our TMS?",
-    a: "No. Agentra is ERP-agnostic and sits on top of the systems you already run through 900+ connectors. It works with what you have.",
+    a: "No. Agentra is ERP-agnostic and sits on top of the systems you already run through 1000+ connectors. It works with what you have.",
   },
   {
     q: "How fast can we see value?",

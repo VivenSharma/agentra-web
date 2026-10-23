@@ -7,7 +7,7 @@ import { CoverArt } from "@/components/insights/CoverArt";
 import { insightDoors } from "@/lib/insights-nav";
 
 export const metadata: Metadata = {
-  title: "Insights",
+  title: "Resources",
   description:
     "Articles, events and customer stories on the agentic supply chain.",
   robots: { index: false, follow: true }, // placeholder until content lands

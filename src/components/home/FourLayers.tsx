@@ -12,7 +12,7 @@ const layers = [
     title: "Data & Ontology Layer",
     icon: Database,
     body: "Your enterprise systems unified into a supply-chain-native ontology. SKUs, lanes, lead times and service levels become one shared language that agents can reason over, not a pile of disconnected tables.",
-    tags: ["900+ integrations", "Proprietary ontology", "Single source of truth"],
+    tags: ["1000+ integrations", "Proprietary ontology", "Single source of truth"],
   },
   {
     id: "reason",

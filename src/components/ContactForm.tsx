@@ -33,6 +33,7 @@ export function ContactForm() {
               className="absolute inset-0 h-full w-full object-cover"
               style={{
                 objectPosition: "center 46%",
+                mixBlendMode: "screen",
                 maskImage:
                   "radial-gradient(ellipse 82% 78% at 50% 48%, #000 38%, transparent 88%)",
                 WebkitMaskImage:

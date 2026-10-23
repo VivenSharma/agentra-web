@@ -45,7 +45,7 @@ export function Connectors() {
             eyebrow="Built on what you have"
             title="Connect everything."
             accent="Act anywhere."
-            sub="Your fragmented estate converges into one autonomy layer. 900+ connectors. Works with what you have."
+            sub="Your fragmented estate converges into one autonomy layer. 1000+ connectors. Works with what you have."
           />
         </Reveal>
 
@@ -155,7 +155,7 @@ export function Connectors() {
               <Pill soft>Kinaxis</Pill>
               <Pill soft>Blue Yonder</Pill>
               <Pill soft>TMS / WMS</Pill>
-              <Pill>+ 900 more</Pill>
+              <Pill>+ 1000 more</Pill>
             </div>
             <p className="mx-auto mt-6 max-w-xl text-center text-sm text-fg-dim">
               One autonomy layer, on the estate you already run. Data stays where

@@ -25,7 +25,7 @@ export const insightDoors: {
   },
   {
     label: "Customer stories",
-    href: "/resources/customer-stories",
+    href: "/customers",
     desc: "How teams put governed agents into production.",
     cta: "Read stories",
     cover: { seed: "agentra-factory-floor", block: "band" },
