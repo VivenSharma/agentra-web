@@ -1,29 +1,35 @@
 import type { Metadata, Viewport } from "next";
-import { Plus_Jakarta_Sans, Albert_Sans, JetBrains_Mono } from "next/font/google";
+import localFont from "next/font/local";
 import "./globals.css";
 import { Nav } from "@/components/Nav";
 import { Footer } from "@/components/Footer";
 import { ScrollProgress } from "@/components/ScrollProgress";
 import { Spotlight } from "@/components/Spotlight";
 
+// Fonts are self-hosted (app/fonts, variable woff2 from Fontsource, SIL OFL)
+// rather than loaded through next/font/google, which broke Vercel builds in
+// Oct 2026 ("next/font/google queries have exactly one entry"). This also
+// means builds never depend on reaching Google Fonts.
+
 // Body + headings — the RedBaton primary typeface
-const jakarta = Plus_Jakarta_Sans({
-  subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700", "800"],
+const jakarta = localFont({
+  src: "./fonts/plus-jakarta-sans-latin-wght-normal.woff2",
+  weight: "200 800",
   variable: "--font-jakarta",
   display: "swap",
 });
 
 // Buttons + eyebrow labels — RedBaton's uppercase label face
-const albert = Albert_Sans({
-  subsets: ["latin"],
-  weight: ["400", "500", "600"],
+const albert = localFont({
+  src: "./fonts/albert-sans-latin-wght-normal.woff2",
+  weight: "100 900",
   variable: "--font-albert",
   display: "swap",
 });
 
-const mono = JetBrains_Mono({
-  subsets: ["latin"],
+const mono = localFont({
+  src: "./fonts/jetbrains-mono-latin-wght-normal.woff2",
+  weight: "100 800",
   variable: "--font-mono-code",
   display: "swap",
 });
