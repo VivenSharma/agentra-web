@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, CalendarDays, MapPin } from "lucide-react";
 import { CTA } from "@/components/CTA";
+import { Copy } from "@/components/Placeholder";
 import { Reveal } from "@/components/Reveal";
 import { pastEvents, type PastEvent } from "@/lib/events";
 
@@ -15,7 +16,6 @@ export const metadata: Metadata = {
 
 // PLACEHOLDER: upcoming dates and formats need confirming before launch.
 const upcoming = [
-  { name: "Celerity", format: "Conference", place: "To be confirmed", when: "Date to be confirmed" },
   { name: "Supply Chain Nexus, Chapter 03", format: "Evening roundtable", place: "To be confirmed", when: "2027" },
 ];
 
@@ -96,7 +96,8 @@ function EventMeta({ event: e }: { event: PastEvent }) {
 }
 
 function EventEntry({ event: e }: { event: PastEvent }) {
-  const [lead, ...rest] = e.photos;
+  const allTall = e.photos.length > 0 && e.photos.every((p) => p.tall);
+  const [lead, ...rest] = allTall ? [] : e.photos;
   return (
     <article id={e.id} className="raised spotlight scroll-mt-28 rounded-[24px] p-6 sm:p-10">
       <div className="grid gap-8 md:grid-cols-12 md:gap-10">
@@ -104,7 +105,7 @@ function EventEntry({ event: e }: { event: PastEvent }) {
           <EventMeta event={e} />
         </div>
         <div className="md:col-span-8">
-          <p className="max-w-[65ch] text-base leading-relaxed text-fg-muted sm:text-lg">{e.body}</p>
+          <Copy text={e.body} className="max-w-[65ch] text-base leading-relaxed text-fg-muted sm:text-lg" />
           {e.link && (
             <Link
               href={e.link.href}
@@ -117,7 +118,23 @@ function EventEntry({ event: e }: { event: PastEvent }) {
         </div>
       </div>
 
-      {/* Photos: one wide lead shot, the rest in a row beneath it */}
+      {/* Portrait photos sit side by side; otherwise one wide lead shot with
+          the rest in a row beneath it */}
+      {allTall && (
+        <div className="mt-10 grid grid-cols-2 gap-3">
+          {e.photos.map((p) => (
+            <figure key={p.src} className="group relative aspect-[3/4] overflow-hidden rounded-2xl ring-1 ring-white/10 md:aspect-[4/5]">
+              <Image
+                src={p.src}
+                alt={p.alt}
+                fill
+                sizes="(min-width: 1240px) 580px, 50vw"
+                className="object-cover transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.03]"
+              />
+            </figure>
+          ))}
+        </div>
+      )}
       {lead && (
         <div className="mt-10 space-y-3">
           <figure className="group relative aspect-[16/9] overflow-hidden rounded-2xl ring-1 ring-white/10 md:aspect-[21/9]">
@@ -130,14 +147,14 @@ function EventEntry({ event: e }: { event: PastEvent }) {
             />
           </figure>
           {rest.length > 0 && (
-            <div className="grid gap-3 sm:grid-cols-3">
+            <div className={`grid gap-3 ${rest.length === 2 ? "sm:grid-cols-2" : "sm:grid-cols-3"}`}>
               {rest.map((p) => (
                 <figure key={p.src} className="group relative aspect-[4/3] overflow-hidden rounded-2xl ring-1 ring-white/10">
                   <Image
                     src={p.src}
                     alt={p.alt}
                     fill
-                    sizes="(min-width: 640px) 33vw, 100vw"
+                    sizes={rest.length === 2 ? "(min-width: 640px) 50vw, 100vw" : "(min-width: 640px) 33vw, 100vw"}
                     className="object-cover transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.05]"
                   />
                 </figure>
