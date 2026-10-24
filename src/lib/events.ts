@@ -1,6 +1,7 @@
 /* Past events for the Events page. Copy is from "Briefs for Website's Event
    Page" (Oct 2026); keep it as written unless Marketing changes it.
-   Newest first. Celerity has no brief yet, so its body is a [PLACEHOLDER].
+   Newest first. Celerity has no brief yet, so it has no body; add one when
+   Marketing supplies it.
    Mark portrait shots `tall`: an event whose photos are all tall gets a
    side-by-side gallery instead of the wide lead crop. */
 
@@ -12,7 +13,7 @@ export type PastEvent = {
   role: string; // Agentra's part in it
   date: string;
   location: string;
-  body: string;
+  body?: string;
   photos: EventPhoto[];
   link?: { href: string; label: string };
 };
@@ -66,7 +67,6 @@ export const pastEvents: PastEvent[] = [
     role: "Exhibitor",
     date: "20 August 2026",
     location: "Mumbai, India",
-    body: "[PLACEHOLDER] Event write-up from Marketing.",
     photos: [
       { src: "/events/celerity/stand.jpg", alt: "The Agentra team at the stand", tall: true },
       { src: "/events/celerity/conversation.jpg", alt: "A conversation with a visitor at the Agentra stand", tall: true },

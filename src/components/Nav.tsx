@@ -6,20 +6,13 @@ import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, ChevronDown } from "lucide-react";
 import { Logo } from "./Logo";
-import { CoverArt } from "./insights/CoverArt";
-import { insightDoors } from "@/lib/insights-nav";
+import { resourceDoors } from "@/lib/insights-nav";
 import { sectors } from "@/lib/sectors";
-
-// Customer stories have their own top-level item, so the Resources panel
-// only carries the reading and events doors.
-const resourceDoors = insightDoors.filter((d) => d.href !== "/customers");
 
 type NavItem = {
   label: string;
   href: string;
   children?: { label: string; href: string; desc?: string }[];
-  // Wide panel with cover art per child (Insights), instead of a plain list
-  mega?: boolean;
 };
 
 // Top nav per the Homepage Changes Checklist (Oct 2026, item 6):
@@ -43,11 +36,9 @@ const navItems: NavItem[] = [
     children: sectors.map((s) => ({ label: s.name, href: `/industries/${s.slug}` })),
   },
   { label: "Customers", href: "/customers" },
-  // Blog and events; pages stay noindex until content lands.
   {
     label: "Resources",
     href: "/resources",
-    mega: true,
     children: resourceDoors.map((d) => ({ label: d.label, href: d.href, desc: d.desc })),
   },
   { label: "Company", href: "/company" },
@@ -115,34 +106,8 @@ export function Nav() {
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: 8 }}
                         transition={{ duration: 0.18 }}
-                        className={`absolute left-1/2 top-full -translate-x-1/2 pt-3 ${
-                          item.mega ? "w-[380px]" : "w-64"
-                        }`}
+                        className="absolute left-1/2 top-full w-64 -translate-x-1/2 pt-3"
                       >
-                        {item.mega ? (
-                          <div className="grid grid-cols-2 gap-2 rounded-2xl border border-line bg-surface p-2 shadow-2xl shadow-black/60">
-                            {resourceDoors.map((d) => (
-                              <Link
-                                key={d.href}
-                                href={d.href}
-                                className="group rounded-xl p-2 transition-colors hover:bg-white/5"
-                              >
-                                <CoverArt
-                                  seed={d.cover.seed}
-                                  src={d.cover.src}
-                                  block={d.cover.block}
-                                  className="aspect-[16/10] rounded-lg"
-                                />
-                                <div className="mt-3 text-sm font-semibold text-fg">
-                                  {d.label}
-                                </div>
-                                <div className="mt-0.5 text-xs leading-snug text-fg-dim">
-                                  {d.desc}
-                                </div>
-                              </Link>
-                            ))}
-                          </div>
-                        ) : (
                         <div className="overflow-hidden rounded-2xl border border-line bg-surface p-2 shadow-2xl shadow-black/60">
                           {item.children.map((c) => (
                             <Link
@@ -161,7 +126,6 @@ export function Nav() {
                             </Link>
                           ))}
                         </div>
-                        )}
                       </motion.div>
                     )}
                   </AnimatePresence>

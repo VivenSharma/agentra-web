@@ -11,7 +11,7 @@ import { sectors } from "@/lib/sectors";
 
 /* ---------------------------------------------------------------
    Client sectors: the trust strip directly under the hero.
-   Each descriptor opens that client's full story.
+   Each descriptor opens that client's page.
    --------------------------------------------------------------- */
 export function ClientSectors() {
   return (
@@ -31,7 +31,7 @@ export function ClientSectors() {
                 <span className="flex-1 text-sm leading-snug text-fg-muted transition-colors duration-300 group-hover:text-fg">
                   {s.client}
                   <span className="mt-1.5 flex items-center gap-1 text-xs font-medium text-purple-5 opacity-70 transition-opacity duration-300 group-hover:opacity-100">
-                    Read the story
+                    {s.name}
                     <ArrowRight className="h-3 w-3 transition-transform duration-300 group-hover:translate-x-0.5" aria-hidden />
                   </span>
                 </span>

@@ -19,7 +19,7 @@ function teamImages(): string[] {
 }
 
 // Live, indexable routes. Resources (blog/whitepapers/podcasts) are excluded
-// until content is ready, so we don't index empty pages.
+// until the pieces themselves are published, so we don't index empty pages.
 const routes: {
   path: string;
   priority: number;
@@ -39,6 +39,7 @@ const routes: {
   { path: "/industries/semiconductors", priority: 0.7, freq: "monthly" },
   { path: "/industries/agriculture", priority: 0.7, freq: "monthly" },
   { path: "/trust", priority: 0.7, freq: "monthly" },
+  { path: "/resources/events", priority: 0.6, freq: "monthly" },
   { path: "/company", priority: 0.7, freq: "monthly", images: teamImages() },
   { path: "/contact", priority: 0.7, freq: "monthly" },
   { path: "/privacy", priority: 0.3, freq: "yearly" },

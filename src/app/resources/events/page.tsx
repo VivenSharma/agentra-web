@@ -3,7 +3,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, CalendarDays, MapPin } from "lucide-react";
 import { CTA } from "@/components/CTA";
-import { Copy } from "@/components/Placeholder";
 import { Reveal } from "@/components/Reveal";
 import { pastEvents, type PastEvent } from "@/lib/events";
 
@@ -11,13 +10,7 @@ export const metadata: Metadata = {
   title: "Events",
   description:
     "Where to meet the Agentra team: Supply Chain Nexus chapters, conferences and roundtables on agentic AI for supply chain.",
-  robots: { index: false, follow: true }, // placeholder until the calendar is confirmed
 };
-
-// PLACEHOLDER: upcoming dates and formats need confirming before launch.
-const upcoming = [
-  { name: "Supply Chain Nexus, Chapter 03", format: "Evening roundtable", place: "To be confirmed", when: "2027" },
-];
 
 export default function EventsPage() {
   return (
@@ -42,28 +35,6 @@ export default function EventsPage() {
               <EventEntry event={e} />
             </Reveal>
           ))}
-        </div>
-      </section>
-
-      {/* Upcoming: placeholder rows */}
-      <section className="border-t border-line py-20">
-        <div className="container-x grid gap-10 md:grid-cols-12">
-          <h2 className="text-2xl font-semibold tracking-tight md:col-span-4 sm:text-[1.7rem]">
-            Coming up
-          </h2>
-          <ul className="divide-y divide-line border-y border-line md:col-span-8">
-            {upcoming.map((e) => (
-              <li key={e.name} className="grid gap-1 py-6 sm:grid-cols-[1fr_auto] sm:items-center sm:gap-6">
-                <div>
-                  <p className="text-lg font-medium">{e.name}</p>
-                  <p className="mt-1 text-sm text-fg-dim">
-                    {e.format}, {e.place}
-                  </p>
-                </div>
-                <p className="text-sm text-fg-muted">{e.when}</p>
-              </li>
-            ))}
-          </ul>
         </div>
       </section>
 
@@ -105,7 +76,7 @@ function EventEntry({ event: e }: { event: PastEvent }) {
           <EventMeta event={e} />
         </div>
         <div className="md:col-span-8">
-          <Copy text={e.body} className="max-w-[65ch] text-base leading-relaxed text-fg-muted sm:text-lg" />
+          {e.body && <p className="max-w-[65ch] text-base leading-relaxed text-fg-muted sm:text-lg">{e.body}</p>}
           {e.link && (
             <Link
               href={e.link.href}
