@@ -26,7 +26,7 @@ export default function PodcastsPage() {
             <Reveal key={p.slug}>
               <article
                 id={p.slug}
-                className="raised grid gap-8 rounded-[24px] p-3 lg:grid-cols-[1.6fr_1fr] lg:items-center lg:gap-10"
+                className="raised grid gap-8 rounded-[24px] p-3 lg:grid-cols-[1.35fr_1fr] lg:items-center lg:gap-10"
               >
                 <video
                   controls
@@ -37,7 +37,7 @@ export default function PodcastsPage() {
                 >
                   <source src={p.video} type="video/mp4" />
                 </video>
-                <div className="px-4 pb-5 lg:px-0 lg:pb-0 lg:pr-8">
+                <div className="px-4 pb-6 pt-2 lg:px-0 lg:py-8 lg:pr-10">
                   <Pill soft>
                     {p.episode} · {p.duration}
                   </Pill>
