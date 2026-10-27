@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
-import { Play } from "lucide-react";
 import { PageHero } from "@/components/PageHero";
 import { CTA } from "@/components/CTA";
 import { Reveal } from "@/components/Reveal";
+import { Pill } from "@/components/ui/Primitives";
 import { podcasts } from "@/lib/data";
 
 export const metadata: Metadata = {
@@ -21,23 +21,43 @@ export default function PodcastsPage() {
         sub="Operators, engineers and leaders on building the agentic supply chain."
       />
       <section className="py-12 sm:py-16">
-        <div className="container-x space-y-4">
-          {podcasts.map((p, i) => (
-            <Reveal key={p.title} delay={i * 0.06}>
-              <div className="glass glass-hover group flex items-center gap-6 p-6">
-                <span className="grid h-14 w-14 shrink-0 place-items-center rounded-2xl bg-grad shadow-[0_8px_24px_-8px_rgba(124,58,237,0.3)] transition-transform group-hover:scale-105">
-                  <Play className="h-5 w-5 fill-white text-white" />
-                </span>
-                <div className="min-w-0 flex-1">
-                  <div className="text-xs font-semibold uppercase tracking-wider text-purple-5">
-                    {p.meta}
+        <div className="container-x space-y-6">
+          {podcasts.map((p) => (
+            <Reveal key={p.slug}>
+              <article
+                id={p.slug}
+                className="raised grid gap-8 rounded-[24px] p-3 lg:grid-cols-[1.6fr_1fr] lg:items-center lg:gap-10"
+              >
+                <video
+                  controls
+                  playsInline
+                  preload="none"
+                  poster={p.poster}
+                  className="aspect-video w-full rounded-[18px] bg-black ring-1 ring-white/10"
+                >
+                  <source src={p.video} type="video/mp4" />
+                </video>
+                <div className="px-4 pb-5 lg:px-0 lg:pb-0 lg:pr-8">
+                  <Pill soft>
+                    {p.episode} · {p.duration}
+                  </Pill>
+                  <h2 className="mt-4 text-2xl font-light leading-snug text-fg sm:text-3xl">
+                    {p.title}
+                  </h2>
+                  <div className="mt-4 space-y-3 text-base leading-relaxed text-fg-muted">
+                    {p.writeUp.map((t) => (
+                      <p key={t}>{t}</p>
+                    ))}
                   </div>
-                  <h2 className="mt-1 truncate text-lg font-bold">{p.title}</h2>
-                  <p className="mt-0.5 truncate text-sm text-fg-muted">
-                    {p.desc}
-                  </p>
+                  <h3 className="mt-6 text-sm font-semibold text-fg">In this episode</h3>
+                  <ol className="mt-3 list-decimal space-y-1.5 pl-5 text-sm leading-relaxed text-fg-muted marker:text-purple-5">
+                    {p.questions.map((q) => (
+                      <li key={q}>{q}</li>
+                    ))}
+                  </ol>
+                  <p className="mt-6 text-sm font-semibold text-fg">{p.tagline}</p>
                 </div>
-              </div>
+              </article>
             </Reveal>
           ))}
         </div>

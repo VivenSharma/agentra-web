@@ -446,25 +446,26 @@ export const solutionDetail: Record<
 };
 
 /* ---------- Resources (podcasts) ---------- */
+// Write-ups are Marketing's; questions are from the video's own captions.
 export const podcasts = [
   {
-    title: "From operator to agentic founder",
-    desc: "Scaling a supply chain company, and why agents are the next step.",
-    meta: "Episode 01 · 42 min",
-  },
-  {
-    title: "Inside the ontology layer",
-    desc: "How agents reason like planners, not chatbots.",
-    meta: "Episode 02 · 38 min",
-  },
-  {
-    title: "Governance without slowing down",
-    desc: "Setting autonomy levels that risk teams trust.",
-    meta: "Episode 03 · 35 min",
-  },
-  {
-    title: "The 2am container problem",
-    desc: "Autonomous exception handling in global logistics.",
-    meta: "Episode 04 · 40 min",
+    slug: "sudip-lahiri",
+    episode: "Episode 01",
+    title: "Advisory Series: Sudip Lahiri",
+    writeUp: [
+      "Conversations with the people closest to Agentra, on agentic AI and the team building it.",
+      "Sudip Lahiri, former EVP at HCLTech, is an advisor to Agentra. In this conversation, he talks about agentic AI, why he backs Agentra, and the team behind it, including a view we hold just as strongly: readiness is not about speed. It is about guardrails and human in the loop, built in from day one.",
+    ],
+    tagline: "The agentic layer for supply chain. You stay in command.",
+    duration: "6 min",
+    video: "/podcasts/sudip-lahiri.mp4",
+    poster: "/podcasts/sudip-lahiri-poster.jpg",
+    questions: [
+      "What drew you to Agentra?",
+      "What makes agentic AI work in a real enterprise?",
+      "How do you keep humans in control of AI?",
+      "Where is Agentra’s biggest opportunity next?",
+      "What stands out about the Agentra team?",
+    ],
   },
 ];
