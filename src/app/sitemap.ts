@@ -40,6 +40,7 @@ const routes: {
   { path: "/industries/agriculture", priority: 0.7, freq: "monthly" },
   { path: "/trust", priority: 0.7, freq: "monthly" },
   { path: "/resources/events", priority: 0.6, freq: "monthly" },
+  { path: "/resources/blog/decision-rights-agentic-supply-chain", priority: 0.6, freq: "monthly" },
   { path: "/resources/blog/tariffs-move-weekly", priority: 0.6, freq: "monthly" },
   { path: "/company", priority: 0.7, freq: "monthly", images: teamImages() },
   { path: "/contact", priority: 0.7, freq: "monthly" },

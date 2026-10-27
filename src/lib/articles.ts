@@ -8,24 +8,118 @@ export type Block =
   | { type: "h3"; text: string }
   | { type: "list"; items: string[] }
   | { type: "quote"; text: string }
-  | { type: "figure"; src: string; alt: string; width: number; height: number; caption?: string };
+  | { type: "figure"; src: string; alt: string; width: number; height: number; caption?: string }
+  | { type: "table"; head: string[]; rows: string[][] }
+  // A self-contained interactive page from /public/embeds, shown in an iframe
+  | { type: "embed"; src: string; title: string };
 
 export type Article = {
   slug: string;
-  tag: string;
+  tag?: string;
   title: string;
+  // Search title and meta description, when Marketing gives ones that differ
+  seoTitle?: string;
+  description?: string;
   dek: string;
   readMins: number;
   cover: { src: string; alt: string; width: number; height: number };
   body: Block[];
   // Closing banner (the whitepaper launch) and the boilerplate under it
   banner?: { src: string; alt: string; width: number; height: number };
-  about: string;
+  about?: string;
 };
 
 const img = (name: string) => `/blog/tariffs-move-weekly/${name}.png`;
+const rights = (name: string) => `/blog/decision-rights-agentic-supply-chain/${name}.png`;
 
 export const articles: Article[] = [
+  {
+    slug: "decision-rights-agentic-supply-chain",
+    title: "Who signs off when an AI agent acts? Decision rights for supply chain leaders",
+    seoTitle: "Who signs off when an AI agent acts?",
+    description:
+      "A practical guide to AI decision governance in supply chain: what AI agents decide alone, what needs approval, and who stays accountable.",
+    dek: "A practical guide to AI decision governance in supply chain: what AI agents decide alone, what needs approval, and who stays accountable.",
+    readMins: 5,
+    cover: {
+      src: rights("cover"),
+      alt: "A planner in a port control room at night, watching the screens as cranes work a container ship outside. One screen shows a decision waiting for approval.",
+      width: 2400,
+      height: 1580,
+    },
+    body: [
+      { type: "p", text: "It’s 2 a.m. A key supplier has just pushed a critical component back by a week. By the time your planning team logs on, an AI agent has already found another supplier who can deliver on time, at a higher price." },
+      { type: "p", text: "Should it place the order?" },
+      { type: "p", text: "If your answer is “it depends”, you’re right. And that “it depends” is exactly what most companies haven’t written down yet." },
+      { type: "p", text: "[Gartner](https://www.gartner.com/en/newsroom/press-releases/2025-05-21-gartner-predicts-half-of-supply-chain-management-solutions-will-include-agentic-ai-capabilities-by-2030) predicts that by 2030, half of cross-functional supply chain solutions will use AI agents to execute decisions on their own. These agents won’t just flag problems. They’ll act: reorder stock, reroute freight, switch suppliers." },
+      { type: "p", text: "So the question for supply chain leaders is no longer what AI can do. It’s what AI is allowed to do, and who answers for it." },
+      { type: "p", text: "That’s what decision rights are for. They set out three things: which decisions an agent can take alone, which need a person’s approval, and who is accountable for the result. Get them right and you have AI decision governance in supply chain that scales." },
+
+      { type: "h2", text: "Two ways to get it wrong" },
+      {
+        type: "list",
+        items: [
+          "**The agent acts when it shouldn’t.** It pays a premium nobody approved, or uses a supplier that procurement never cleared.",
+          "**The agent waits when it shouldn’t.** It flags an obvious fix and sits in someone’s inbox while the line goes down.",
+        ],
+      },
+      { type: "p", text: "Both cost money. Both leave people arguing about who was responsible. And both erode the one thing agents need to work at all: trust." },
+
+      { type: "h2", text: "Match autonomy to risk" },
+      { type: "p", text: "The rule is simple: the bigger the risk, the more human oversight." },
+      {
+        type: "table",
+        head: ["Decision type", "Examples", "Who decides"],
+        rows: [
+          ["Routine, low risk", "Replenishing stock within approved limits; rerouting a shipment within an agreed cost cap", "The agent acts and logs what it did"],
+          ["Material", "Expediting at a significant premium; changing production priorities that affect customer commitments", "The agent recommends; a named person approves"],
+          ["High risk or restricted", "Using an unvetted supplier; overriding safety or procurement controls", "A person decides; the agent can’t act"],
+        ],
+      },
+      { type: "p", text: "Note: exact limits depend on your policies, risk appetite and delegated authority." },
+      { type: "figure", src: rights("match-autonomy-to-risk"), alt: "Match autonomy to risk: routine decisions the agent acts on, material decisions a named person approves, high-risk decisions a person makes.", width: 2400, height: 1350 },
+
+      { type: "h2", text: "Three questions to draw the line" },
+      { type: "p", text: "**1. What’s the impact?** Does the action stay within budget and service-level limits? A routine replenishment order is one thing; a six-figure spot buy is another." },
+      { type: "p", text: "**2. Can it be undone?** Changing a delivery slot is easy to reverse. A new supplier contract isn’t. Anything touching safety or compliance gets the strictest rules." },
+      { type: "p", text: "**3. Is it within policy?** An action can look like the best option and still break your purchasing rules. Policy wins." },
+      { type: "p", text: "In short: agents act inside clear boundaries, ask when they reach the edge, and never cross the lines you’ve ruled out." },
+      { type: "embed", src: "/embeds/act-ask-stop.html", title: "Act, ask or stop: interactive decision flow" },
+      { type: "p", text: "**The right humans in the loop, not humans in the way.**" },
+
+      { type: "h2", text: "Four steps to put decision rights in place" },
+      { type: "figure", src: rights("four-steps-decision-rights"), alt: "Four steps to put decision rights in place: define scope, set approval thresholds, name an owner, build in escalation and an audit trail.", width: 2400, height: 1350 },
+      { type: "p", text: "**1. Define what each agent is allowed to do.** Before an agent goes live, write down its scope. A replenishment agent might monitor stock, spot shortfalls and raise orders. Whether it can place those orders on its own depends on your purchasing policy." },
+      { type: "p", text: "**2. Set approval thresholds by risk.** The bigger the potential impact, the tighter the rule. For example, an agent may reroute a shipment up to an agreed cost limit. Above that, it asks first." },
+      { type: "p", text: "**3. Name an owner for every consequential decision.** An agent can do the work. A person still owns the outcome. A procurement manager might keep authority over any exception involving an unapproved supplier. Write it down; don’t leave it to interpretation." },
+      { type: "p", text: "**4. Build in escalation and an audit trail.** If an agent can’t find an approved supplier that meets the deadline, it escalates the exception. It doesn’t work around procurement. Every action is logged, so anyone can see what happened and why." },
+      { type: "p", text: "None of this is new to good supply chain teams. It’s how you’d brief a new planner. The [NIST AI Risk Management Framework](https://www.nist.gov/itl/ai-risk-management-framework) puts governance at its core for the same reason: the rules have to exist before the technology can follow them." },
+
+      { type: "h2", text: "Accountability doesn’t move to the machine" },
+      { type: "p", text: "Lalit Das, Agentra’s founder and CEO, has seen this from both sides. He ran a 4PL P&L at Kuehne + Nagel, where he owned the outcome for clients’ entire networks. Then, in 2012, he founded 3SC, a supply chain SaaS, analytics and execution company serving clients across CPG, healthcare, industrial manufacturing and consumer durables." },
+      { type: "quote", text: "“When you own a 4PL P&L, there’s nobody to pass the blame to. Building 3SC taught me the other half: the analytics can be brilliant, but if technology doesn’t fit the way people actually work, it won’t get used. AI agents don’t change either lesson. If a leader can’t see how a decision was made, they shouldn’t be asked to trust it.”" },
+
+      { type: "h2", text: "Where Agentra fits" },
+      { type: "figure", src: rights("autonomy-levels"), alt: "The autonomy dial: Suggest, Co-pilot and Autopilot.", width: 1288, height: 208 },
+      { type: "p", text: "Your organisation defines the decision rights. Agentra makes sure agents follow them. Each agent runs at the level you choose:" },
+      {
+        type: "list",
+        items: [
+          "**Suggest:** it recommends; people act.",
+          "**Co-pilot:** it acts after a person approves.",
+          "**Autopilot:** it acts within guardrails you set.",
+        ],
+      },
+      { type: "p", text: "Every action is explained and recorded in an audit trail. And because Agentra works inside the ERP, planning and procurement systems you already run, your existing approval rules stay in force. [See how governance works](/platform#governance)" },
+
+      { type: "h2", text: "The bottom line" },
+      { type: "p", text: "Autonomy without accountability is a risk. Accountability without autonomy is just another dashboard." },
+      { type: "p", text: "The goal isn’t to hand every decision to AI. It’s to give agents clear authority, clear limits and a clear way to bring people in." },
+      { type: "p", text: "Back to 2 a.m. With decision rights in place, the agent knows its limit. The new supplier’s price is above it, so it sends the option, with its reasoning, to the right manager. The order goes out before the morning meeting." },
+      { type: "figure", src: rights("the-2am-scenario"), alt: "The 2 a.m. scenario: the agent finds another supplier, hits its price limit, escalates to the right manager, and the order goes out before the morning meeting.", width: 2400, height: 1350 },
+      { type: "p", text: "**Want to map the decision rights for your first agent? [Talk to our team](/contact)**" },
+    ],
+  },
   {
     slug: "tariffs-move-weekly",
     tag: "Supply chain · Tariffs",

@@ -1,0 +1,21 @@
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Agentra//Whitepaper launch//EN
+CALSCALE:GREGORIAN
+METHOD:PUBLISH
+BEGIN:VEVENT
+UID:whitepaper-launch-20261109@agentra-ai.com
+DTSTAMP:20261027T000000Z
+DTSTART;VALUE=DATE:20261109
+DTEND;VALUE=DATE:20261110
+SUMMARY:Agentra whitepaper launch: Ready to move from tariff alerts to action?
+DESCRIPTION:The new Agentra whitepaper launches today.\nhttps://www.agentra-ai.com/resources/whitepapers
+URL:https://www.agentra-ai.com/resources/whitepapers
+TRANSP:TRANSPARENT
+BEGIN:VALARM
+ACTION:DISPLAY
+DESCRIPTION:Agentra whitepaper launches today
+TRIGGER;RELATED=START:PT9H
+END:VALARM
+END:VEVENT
+END:VCALENDAR

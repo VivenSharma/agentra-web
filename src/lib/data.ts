@@ -445,69 +445,7 @@ export const solutionDetail: Record<
   },
 };
 
-/* ---------- Resources (whitepapers / blog / podcasts) ---------- */
-export const whitepapers = [
-  {
-    title: "The agentic supply chain: from automation to autonomy",
-    desc: "A framework for moving from dashboards and rules to a governed workforce of agents.",
-    meta: "Whitepaper · 18 pages",
-  },
-  {
-    title: "Ontology-powered reasoning for supply chain",
-    desc: "Why a supply-chain-native ontology beats generic models pointed at your data.",
-    meta: "Whitepaper · 12 pages",
-  },
-  {
-    title: "Governing autonomous agents in the enterprise",
-    desc: "Human-in-the-loop, explainability and audit for regulated supply chains.",
-    meta: "Whitepaper · 15 pages",
-  },
-  {
-    title: "The economics of a 16-week delivery guarantee",
-    desc: "How to scope, prove and measure value against a real outcome.",
-    meta: "Whitepaper · 10 pages",
-  },
-];
-
-export const blogPosts = [
-  {
-    title: "Why vertical beats horizontal for supply chain AI",
-    desc: "Domain depth is the difference between reasoning in SKUs and lanes and a generic copilot.",
-    meta: "Article · 6 min",
-    tag: "Platform",
-  },
-  {
-    title: "Closing the loop from decision to action",
-    desc: "Visibility platforms see, planning suites recommend. Agentra acts inside your stack.",
-    meta: "Article · 5 min",
-    tag: "Execution",
-  },
-  {
-    title: "Reading outcomes as ranges, not point estimates",
-    desc: "Honest proof for enterprise AI, and how we scope value up front.",
-    meta: "Article · 4 min",
-    tag: "Proof",
-  },
-  {
-    title: "The night-shift problem in global logistics",
-    desc: "What happens when a container misses its cutoff at 2am and nobody is awake.",
-    meta: "Article · 7 min",
-    tag: "Resilience",
-  },
-  {
-    title: "Probabilistic over deterministic reasoning",
-    desc: "Why deterministic logic breaks in volatile conditions and agents hold up.",
-    meta: "Article · 6 min",
-    tag: "Reasoning",
-  },
-  {
-    title: "Building on the estate you already run",
-    desc: "ERP-agnostic integration across SAP, Oracle, Dynamics 365 and your TMS and WMS.",
-    meta: "Article · 5 min",
-    tag: "Integration",
-  },
-];
-
+/* ---------- Resources (podcasts) ---------- */
 export const podcasts = [
   {
     title: "From operator to agentic founder",

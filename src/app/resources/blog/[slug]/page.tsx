@@ -5,6 +5,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
 import { CTA } from "@/components/CTA";
+import { ArticleEmbed } from "@/components/ArticleEmbed";
 import { articles, getArticle, type Block } from "@/lib/articles";
 
 export function generateStaticParams() {
@@ -16,8 +17,8 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const a = getArticle(slug);
   if (!a) return { title: "Blog" };
   return {
-    title: a.title,
-    description: a.dek,
+    title: a.seoTitle ?? a.title,
+    description: a.description ?? a.dek,
     alternates: { canonical: `/resources/blog/${a.slug}` },
     openGraph: {
       type: "article",
@@ -27,6 +28,9 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     },
   };
 }
+
+const linkClass =
+  "text-purple-5 underline decoration-purple-4/40 underline-offset-4 transition-colors hover:text-purple-6";
 
 // Inline marks used in the article copy: **bold** and [text](url).
 function Inline({ text }: { text: string }) {
@@ -38,8 +42,14 @@ function Inline({ text }: { text: string }) {
     if (m[1]) {
       parts.push(
         <strong key={m.index} className="font-semibold text-fg">
-          {m[1]}
+          <Inline text={m[1]} />
         </strong>,
+      );
+    } else if (m[3].startsWith("/")) {
+      parts.push(
+        <Link key={m.index} href={m[3]} className={linkClass}>
+          {m[2]}
+        </Link>,
       );
     } else {
       parts.push(
@@ -48,7 +58,7 @@ function Inline({ text }: { text: string }) {
           href={m[3]}
           target="_blank"
           rel="noopener noreferrer"
-          className="text-purple-5 underline decoration-purple-4/40 underline-offset-4 transition-colors hover:text-purple-6"
+          className={linkClass}
         >
           {m[2]}
         </a>,
@@ -102,6 +112,33 @@ function BlockView({ b }: { b: Block }) {
           {b.caption && <figcaption className="mt-3 text-sm text-fg-dim">{b.caption}</figcaption>}
         </figure>
       );
+    case "table":
+      return (
+        <div className="overflow-x-auto rounded-2xl ring-1 ring-white/10">
+          <table className="w-full min-w-[560px] text-left text-base">
+            <thead className="bg-white/[0.04] text-sm text-fg">
+              <tr>
+                {b.head.map((h) => (
+                  <th key={h} className="px-5 py-3 font-semibold">{h}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-white/10">
+              {b.rows.map((r) => (
+                <tr key={r[0]}>
+                  {r.map((c, i) => (
+                    <td key={i} className={`px-5 py-4 align-top ${i === 0 ? "font-medium text-fg" : ""}`}>
+                      {c}
+                    </td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      );
+    case "embed":
+      return <ArticleEmbed src={b.src} title={b.title} />;
   }
 }
 
@@ -122,10 +159,12 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
               <ArrowLeft className="h-4 w-4" aria-hidden />
               Blog
             </Link>
-            <p className="fade-up mt-8 text-xs font-semibold uppercase tracking-wider text-purple-5 [animation-delay:40ms]">
-              {a.tag}
-            </p>
-            <h1 className="fade-up mt-4 text-balance text-4xl font-light leading-[1.1] tracking-[-0.02em] sm:text-5xl [animation-delay:80ms]">
+            {a.tag && (
+              <p className="fade-up mt-8 text-xs font-semibold uppercase tracking-wider text-purple-5 [animation-delay:40ms]">
+                {a.tag}
+              </p>
+            )}
+            <h1 className={`fade-up ${a.tag ? "mt-4" : "mt-8"} text-balance text-4xl font-light leading-[1.1] tracking-[-0.02em] sm:text-5xl [animation-delay:80ms]`}>
               {a.title}
             </h1>
             <p className="fade-up mt-5 text-lg leading-relaxed text-fg-muted [animation-delay:120ms]">{a.dek}</p>
@@ -170,15 +209,17 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
           </div>
         )}
 
-        <aside className="container-x mt-12">
-          <div className="raised mx-auto max-w-[760px] rounded-[20px] p-7 sm:p-8">
-            <h2 className="text-base font-semibold text-fg">About Agentra</h2>
-            <p className="mt-3 text-base leading-relaxed text-fg-muted">
-              <Inline text={a.about} />
-            </p>
-            <p className="mt-4 text-base font-semibold text-fg">You stay in command.</p>
-          </div>
-        </aside>
+        {a.about && (
+          <aside className="container-x mt-12">
+            <div className="raised mx-auto max-w-[760px] rounded-[20px] p-7 sm:p-8">
+              <h2 className="text-base font-semibold text-fg">About Agentra</h2>
+              <p className="mt-3 text-base leading-relaxed text-fg-muted">
+                <Inline text={a.about} />
+              </p>
+              <p className="mt-4 text-base font-semibold text-fg">You stay in command.</p>
+            </div>
+          </aside>
+        )}
       </article>
 
       <CTA />
