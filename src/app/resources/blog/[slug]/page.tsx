@@ -83,6 +83,12 @@ function BlockView({ b }: { b: Block }) {
           <Inline text={b.text} />
         </p>
       );
+    case "cta":
+      return (
+        <p className="!mt-14 border-t border-white/10 pt-10">
+          <Inline text={b.text} />
+        </p>
+      );
     case "list": {
       const items = b.items.map((t) => (
         <li key={t}>

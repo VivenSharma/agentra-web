@@ -4,6 +4,8 @@
 
 export type Block =
   | { type: "p"; text: string }
+  // Closing call to action, set apart from the article body
+  | { type: "cta"; text: string }
   | { type: "h2"; text: string }
   | { type: "h3"; text: string }
   | { type: "list"; items: string[]; ordered?: boolean }
@@ -140,7 +142,7 @@ export const articles: Article[] = [
         ],
       },
       { type: "p", text: "**Your supply chain, acting on what it knows. You stay in command.**" },
-      { type: "p", text: "**Ready to see how daily demand sensing and store replenishment could work across your network? [Book a 30-minute walkthrough with Agentra.](/contact)**" },
+      { type: "cta", text: "**Ready to see how daily demand sensing and store replenishment could work across your network? [Book a 30-minute walkthrough with Agentra.](/contact)**" },
     ],
   },
   {
