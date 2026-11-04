@@ -6,6 +6,7 @@ import { notFound } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
 import { CTA } from "@/components/CTA";
 import { ArticleEmbed } from "@/components/ArticleEmbed";
+import { ReplenishmentLoop } from "@/components/viz/ReplenishmentLoop";
 import { articles, getArticle, type Block } from "@/lib/articles";
 
 export function generateStaticParams() {
@@ -141,6 +142,12 @@ function BlockView({ b }: { b: Block }) {
       );
     case "embed":
       return <ArticleEmbed src={b.src} title={b.title} />;
+    case "viz":
+      return (
+        <div className="py-2">
+          <ReplenishmentLoop />
+        </div>
+      );
   }
 }
 

@@ -11,7 +11,9 @@ export type Block =
   | { type: "figure"; src: string; alt: string; width: number; height: number; caption?: string }
   | { type: "table"; head: string[]; rows: string[][] }
   // A self-contained interactive page from /public/embeds, shown in an iframe
-  | { type: "embed"; src: string; title: string };
+  | { type: "embed"; src: string; title: string }
+  // A diagram rebuilt as a live component (components/viz), in place of a flat graphic
+  | { type: "viz"; name: "replenishment-loop" };
 
 export type Article = {
   slug: string;
@@ -89,7 +91,7 @@ export const articles: Article[] = [
 
       { type: "h2", text: "How the Daily Replenishment Loop Works" },
       { type: "p", text: "The process does not stop at identifying a change in demand. Agents need to assess whether the required ingredients are available, prepare the order and determine whether it can proceed automatically or needs human review." },
-      { type: "figure", src: fresh("replenishment-loop"), alt: "The daily demand-to-replenishment loop: sense what each store needs, test whether the requirement can be fulfilled, then release routine orders within agreed guardrails or escalate exceptions to the inventory team. It repeats as new demand and stock data arrives.", width: 1700, height: 1292 },
+      { type: "viz", name: "replenishment-loop" },
 
       { type: "h2", text: "From DC to Store: Turning Decisions into Replenishment" },
       { type: "p", text: "The value of demand sensing comes from what happens next. Agentra's agentic AI platform works alongside existing enterprise systems. It connects data and workflows to help agents move from identifying a demand change to preparing the next action." },
