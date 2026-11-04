@@ -6,7 +6,7 @@ export type Block =
   | { type: "p"; text: string }
   | { type: "h2"; text: string }
   | { type: "h3"; text: string }
-  | { type: "list"; items: string[] }
+  | { type: "list"; items: string[]; ordered?: boolean }
   | { type: "quote"; text: string }
   | { type: "figure"; src: string; alt: string; width: number; height: number; caption?: string }
   | { type: "table"; head: string[]; rows: string[][] }
@@ -31,8 +31,116 @@ export type Article = {
 
 const img = (name: string) => `/blog/tariffs-move-weekly/${name}.png`;
 const rights = (name: string) => `/blog/decision-rights-agentic-supply-chain/${name}.png`;
+const fresh = (name: string) => `/blog/daily-demand-sensing-store-replenishment/${name}.png`;
 
 export const articles: Article[] = [
+  {
+    slug: "daily-demand-sensing-store-replenishment",
+    title: "Daily Demand Sensing and Store Replenishment for Fresh Food Chains",
+    description:
+      "See how agentic AI helps fresh food chains sense ingredient demand, prepare store orders and manage replenishment without replacing their ERP.",
+    dek: "See how agentic AI helps fresh food chains sense ingredient demand, prepare store orders and manage replenishment without replacing their ERP.",
+    readMins: 5,
+    cover: {
+      src: fresh("cover"),
+      alt: "Illustration of a distribution centre with fresh ingredients in its dock bays, an operations lead with a tablet, and a chilled van heading to a store beneath stadium floodlights.",
+      width: 1700,
+      height: 1000,
+    },
+    body: [
+      { type: "p", text: "A busy evening can change what a restaurant needs. A store near a major sporting event may see more orders than usual, while another location continues to experience normal demand." },
+      { type: "p", text: "For a food chain operating across multiple locations, this creates a daily planning challenge. Each store needs the right quantities of fresh ingredients, at the right time. Too little stock can affect availability. Too much can increase waste." },
+      { type: "p", text: "Yet planning often starts at the distribution-centre level. Periodic plans provide a view of inventory across the network, but they may not reflect changing requirements at every store." },
+      { type: "p", text: "The challenge is to connect demand changes with daily, ingredient-level decisions and ensure that each store receives what it needs." },
+      { type: "p", text: "**This is where agentic AI can help bridge the gap between demand planning and store replenishment.**" },
+
+      { type: "h2", text: "Why Periodic Planning Falls Short at Store Level" },
+      { type: "p", text: "DC-level planning helps manage inventory across the distribution network. But it may not capture the changing needs of individual stores." },
+      { type: "p", text: "Consider two stores in the same city. One is near a major sporting event, while the other serves a quieter neighbourhood. Their ingredient requirements may differ on the same day." },
+      {
+        type: "list",
+        items: [
+          "**Demand varies by location:** Local events, customer preferences and recent sales influence store-level demand.",
+          "**Ingredients have limited shelf lives:** Overstocking increases food waste, while insufficient stock risks stockouts.",
+          "**Inventory is spread across the network:** Teams must consider store stock, incoming deliveries and DC availability.",
+          "**Store ordering can remain manual:** Teams may still rely on periodic forecasts and manual checks to prepare replenishment orders.",
+        ],
+      },
+      { type: "p", text: "Market conditions add to the challenge. Vesper reported that European mozzarella shifted from leading the market down to leading it up in about a month, despite stable supply. UK food inflation also rose to 2.9% in October 2026, up from 2.5% in September, according to the British Retail Consortium and NIQ." },
+      { type: "p", text: "For a fresh food supply chain, responsive **demand sensing** and **store replenishment** are essential. Businesses need to understand not just how much inventory they hold across the network, but what each store needs and when." },
+
+      { type: "h2", text: "From Demand Signals to Ingredient-Level Decisions" },
+      { type: "p", text: "Demand forecasting estimates what customers are likely to buy. Demand sensing uses recent information to update that view as conditions change. For fresh food chains, this needs to happen at both the store and ingredient level." },
+      { type: "p", text: "For example, an increase in expected pizza sales at a particular store should translate into higher requirements for the ingredients used to prepare those pizzas." },
+      { type: "p", text: "An agentic AI platform can help coordinate this process." },
+      { type: "p", text: "Agents can:" },
+      {
+        type: "list",
+        ordered: true,
+        items: [
+          "**Sense demand:** Analyse recent sales, historical patterns and relevant demand signals.",
+          "**Calculate ingredient needs:** Translate expected store-level sales into ingredient requirements.",
+          "**Check inventory:** Consider available stock, incoming deliveries and supply constraints.",
+          "**Prepare replenishment:** Draft the quantities each store needs and the corresponding DC-to-store replenishment.",
+          "**Identify exceptions:** Flag situations where stock, supply or other constraints prevent the recommended order from being fulfilled.",
+        ],
+      },
+      { type: "p", text: "Instead of simply reporting that demand has changed, agents can help move the process towards an actionable store order." },
+
+      { type: "h2", text: "How the Daily Replenishment Loop Works" },
+      { type: "p", text: "The process does not stop at identifying a change in demand. Agents need to assess whether the required ingredients are available, prepare the order and determine whether it can proceed automatically or needs human review." },
+      { type: "figure", src: fresh("replenishment-loop"), alt: "The daily demand-to-replenishment loop: sense what each store needs, test whether the requirement can be fulfilled, then release routine orders within agreed guardrails or escalate exceptions to the inventory team. It repeats as new demand and stock data arrives.", width: 1700, height: 1292 },
+
+      { type: "h2", text: "From DC to Store: Turning Decisions into Replenishment" },
+      { type: "p", text: "The value of demand sensing comes from what happens next. Agentra's agentic AI platform works alongside existing enterprise systems. It connects data and workflows to help agents move from identifying a demand change to preparing the next action." },
+      { type: "p", text: "For a multi-store food business, the process can work as follows:" },
+      {
+        type: "list",
+        items: [
+          "An agent analyses demand signals for each store.",
+          "It estimates the requirement for individual ingredients.",
+          "It checks store inventory, incoming stock and DC availability.",
+          "It drafts the store order and the associated replenishment requirement.",
+          "It routes the order through the agreed workflow.",
+        ],
+      },
+      { type: "p", text: "This creates a more connected process between demand planning and store replenishment." },
+      { type: "p", text: "The objective is not to replace the ERP or rebuild existing systems. It is to add an agentic layer that helps businesses make and execute store-level decisions using the systems they already have." },
+      { type: "p", text: "BCG's The AI-First Supply Chain (2026) describes a consumer goods case where agent-supported replenishment improved stock movements, including distribution-centre-to-store transfers. Fill rates increased, while administration costs fell by 40% to 60%." },
+      { type: "p", text: "This is an example of the operational improvements that better-coordinated replenishment can support." },
+
+      { type: "h2", text: "People Stay in Control. Routine Work Moves Faster" },
+      {
+        type: "list",
+        items: [
+          "Automation in a fresh-food supply chain needs clear boundaries. Routine orders can move within predefined rules, such as order quantities, inventory limits and approval requirements. Exceptions should go to the inventory team.",
+          "For example, if a DC cannot fulfil a store's mozzarella requirement, the agent can flag the shortfall, explain the reason and present the proposed action for review. The team can then approve, edit or reject it.",
+        ],
+      },
+      { type: "figure", src: fresh("exception-review"), alt: "Illustration of a planning team at an operations wall, with one colleague pointing at a store order flagged for a mozzarella shortfall.", width: 1700, height: 1000 },
+      {
+        type: "list",
+        items: [
+          "This approach is important. Gartner (2026) warns that true autonomy remains limited and that agent washing creates real risks.",
+          "The goal is not to automate every decision. It is to automate routine work while keeping people in control of decisions that require judgement.",
+        ],
+      },
+      { type: "p", text: "**The right humans in the loop, not humans in the way.**" },
+
+      { type: "h2", text: "Add Store-Level Intelligence Without Replacing Your ERP" },
+      {
+        type: "list",
+        items: [
+          "Fresh food chains do not need another disconnected planning system. They need a way to connect demand signals, inventory information and replenishment workflows across their existing operations.",
+          "Agentra provides an agentic layer that works with existing enterprise systems. Its platform offers 1,000+ connectors, and the first agent is typically live in 6–8 weeks.",
+          "This gives businesses a way to start with a focused workflow, connect the relevant data and expand as operational needs evolve.",
+          "The opportunity is clear: move beyond periodic, DC-level planning towards daily decisions at the ingredient and store level.",
+        ],
+      },
+      { type: "p", text: "**Your supply chain, acting on what it knows. You stay in command.**" },
+      { type: "p", text: "**Ready to see how daily demand sensing and store replenishment could work across your network? [Book a 30-minute walkthrough with Agentra.](/contact)**" },
+    ],
+  },
   {
     slug: "decision-rights-agentic-supply-chain",
     title: "Who signs off when an AI agent acts? Decision rights for supply chain leaders",

@@ -82,16 +82,18 @@ function BlockView({ b }: { b: Block }) {
           <Inline text={b.text} />
         </p>
       );
-    case "list":
-      return (
-        <ul className="list-disc space-y-2 pl-6 marker:text-purple-5">
-          {b.items.map((t) => (
-            <li key={t}>
-              <Inline text={t} />
-            </li>
-          ))}
-        </ul>
+    case "list": {
+      const items = b.items.map((t) => (
+        <li key={t}>
+          <Inline text={t} />
+        </li>
+      ));
+      return b.ordered ? (
+        <ol className="list-decimal space-y-2 pl-6 marker:text-purple-5">{items}</ol>
+      ) : (
+        <ul className="list-disc space-y-2 pl-6 marker:text-purple-5">{items}</ul>
       );
+    }
     case "quote":
       return (
         <blockquote className="border-l-2 border-purple-4/60 py-1 pl-6 text-xl font-light leading-snug text-fg sm:text-2xl">
