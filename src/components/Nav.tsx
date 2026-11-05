@@ -8,42 +8,76 @@ import { Menu, X, ChevronDown } from "lucide-react";
 import { Logo } from "./Logo";
 import { resourceDoors } from "@/lib/insights-nav";
 import { sectors } from "@/lib/sectors";
+import { hasPress } from "@/lib/press";
 
+type NavLink = { label: string; href: string; desc?: string };
+type NavGroup = { title: string; href: string; links: NavLink[] };
 type NavItem = {
   label: string;
   href: string;
-  children?: { label: string; href: string; desc?: string }[];
+  children?: NavLink[];
+  groups?: NavGroup[]; // multi-column dropdown
 };
 
-// Top nav per the Homepage Changes Checklist (Oct 2026, item 6):
-// Platform, Solutions, Industries, Customers, Resources, Company, Trust,
-// with Book a demo as the only button.
+// Condensed top nav (Nov 2026: keep the bar short).
+// Solutions is a 3-way mega menu holding Platform, capabilities and
+// industries; Customers and Press sit inside Company (as in the footer).
+// Resources and Trust stay standalone top-level items by request.
+// Book a demo is the only button.
 const navItems: NavItem[] = [
-  { label: "Platform", href: "/platform" },
   {
     label: "Solutions",
     href: "/solutions",
-    children: [
-      { label: "Planning", href: "/solutions/planning", desc: "Replan continuously" },
-      { label: "Resilience", href: "/solutions/resilience", desc: "See disruption early" },
-      { label: "Execution", href: "/solutions/execution", desc: "Act inside your systems" },
-      { label: "Orchestration", href: "/solutions/orchestration", desc: "Coordinate every agent" },
+    groups: [
+      {
+        title: "Platform",
+        href: "/platform",
+        links: [
+          { label: "Overview", href: "/platform", desc: "Every signal in, one autonomy layer out" },
+        ],
+      },
+      {
+        title: "By capability",
+        href: "/solutions",
+        links: [
+          { label: "Planning", href: "/solutions/planning", desc: "Replan continuously" },
+          { label: "Resilience", href: "/solutions/resilience", desc: "See disruption early" },
+          { label: "Execution", href: "/solutions/execution", desc: "Act inside your systems" },
+          { label: "Orchestration", href: "/solutions/orchestration", desc: "Coordinate every agent" },
+        ],
+      },
+      {
+        title: "By industry",
+        href: "/industries",
+        links: sectors.map((s) => ({ label: s.name, href: `/industries/${s.slug}` })),
+      },
     ],
   },
-  {
-    label: "Industries",
-    href: "/industries",
-    children: sectors.map((s) => ({ label: s.name, href: `/industries/${s.slug}` })),
-  },
-  { label: "Customers", href: "/customers" },
   {
     label: "Resources",
     href: "/resources",
     children: resourceDoors.map((d) => ({ label: d.label, href: d.href, desc: d.desc })),
   },
-  { label: "Company", href: "/company" },
+  {
+    label: "Company",
+    href: "/company",
+    children: [
+      { label: "About", href: "/company", desc: "Our story and team" },
+      { label: "Customers", href: "/customers", desc: "Who we work with" },
+      ...(hasPress ? [{ label: "Press", href: "/company/press", desc: "Agentra in the news" }] : []),
+    ],
+  },
   { label: "Trust", href: "/trust" },
 ];
+
+// Every link under an item, so the item lights up on any of its pages.
+const itemLinks = (item: NavItem): NavLink[] =>
+  item.groups ? item.groups.flatMap((g) => g.links) : item.children ?? [];
+
+const isItemActive = (item: NavItem, pathname: string) =>
+  pathname.startsWith(item.href) ||
+  (item.groups?.some((g) => pathname.startsWith(g.href)) ?? false) ||
+  itemLinks(item).some((c) => pathname.startsWith(c.href));
 
 export function Nav() {
   const [scrolled, setScrolled] = useState(false);
@@ -87,18 +121,16 @@ export function Nav() {
                 <Link
                   href={item.href}
                   className={`nav-link inline-flex items-center gap-1 whitespace-nowrap ${
-                    pathname.startsWith(item.href) && item.href !== "/"
-                      ? "is-active"
-                      : ""
+                    isItemActive(item, pathname) ? "is-active" : ""
                   }`}
                 >
                   {item.label}
-                  {item.children && (
+                  {(item.children || item.groups) && (
                     <ChevronDown className="h-3.5 w-3.5 opacity-60" />
                   )}
                 </Link>
 
-                {item.children && (
+                {(item.children || item.groups) && (
                   <AnimatePresence>
                     {hovered === item.label && (
                       <motion.div
@@ -106,25 +138,32 @@ export function Nav() {
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: 8 }}
                         transition={{ duration: 0.18 }}
-                        className="absolute left-1/2 top-full w-64 -translate-x-1/2 pt-3"
+                        className={`absolute left-1/2 top-full -translate-x-1/2 pt-3 ${
+                          item.groups ? "w-[44rem]" : "w-64"
+                        }`}
                       >
                         <div className="overflow-hidden rounded-2xl border border-line bg-surface p-2 shadow-2xl shadow-black/60">
-                          {item.children.map((c) => (
-                            <Link
-                              key={c.href}
-                              href={c.href}
-                              className="group block rounded-xl px-3 py-2.5 transition-colors hover:bg-purple-3/10"
-                            >
-                              <div className="text-sm font-semibold text-fg transition-colors group-hover:text-purple-6">
-                                {c.label}
-                              </div>
-                              {c.desc && (
-                                <div className="text-xs text-fg-dim">
-                                  {c.desc}
+                          {item.groups ? (
+                            <div className="grid grid-cols-3 gap-1">
+                              {item.groups.map((g) => (
+                                <div key={g.title}>
+                                  <Link
+                                    href={g.href}
+                                    className="block px-3 pb-1 pt-2 text-xs font-medium text-fg-dim transition-colors hover:text-purple-6"
+                                  >
+                                    {g.title}
+                                  </Link>
+                                  {g.links.map((c) => (
+                                    <DropdownLink key={c.href} link={c} />
+                                  ))}
                                 </div>
-                              )}
-                            </Link>
-                          ))}
+                              ))}
+                            </div>
+                          ) : (
+                            item.children!.map((c) => (
+                              <DropdownLink key={c.href} link={c} />
+                            ))
+                          )}
                         </div>
                       </motion.div>
                     )}
@@ -170,7 +209,7 @@ export function Nav() {
                   >
                     {item.label}
                   </Link>
-                  {item.children && (
+                  {(item.children || item.groups) && (
                     <button
                       onClick={() =>
                         setMobileExpanded(
@@ -188,17 +227,26 @@ export function Nav() {
                     </button>
                   )}
                 </div>
-                {item.children && mobileExpanded === item.label && (
+                {(item.children || item.groups) && mobileExpanded === item.label && (
                   <div className="ml-3 border-l border-line pl-3">
-                    {item.children.map((c) => (
-                      <Link
-                        key={c.href}
-                        href={c.href}
-                        onClick={closeMenu}
-                        className="block rounded-lg px-3 py-2.5 text-sm text-fg-muted hover:text-fg"
-                      >
-                        {c.label}
-                      </Link>
+                    {(item.groups ?? [{ title: "", href: "", links: item.children! }]).map((g) => (
+                      <div key={g.title || item.label}>
+                        {g.title && (
+                          <div className="px-3 pb-1 pt-3 text-xs font-medium text-fg-dim">
+                            {g.title}
+                          </div>
+                        )}
+                        {g.links.map((c) => (
+                          <Link
+                            key={c.href}
+                            href={c.href}
+                            onClick={closeMenu}
+                            className="block rounded-lg px-3 py-2.5 text-sm text-fg-muted hover:text-fg"
+                          >
+                            {c.label}
+                          </Link>
+                        ))}
+                      </div>
                     ))}
                   </div>
                 )}
@@ -215,5 +263,19 @@ export function Nav() {
         </div>
       )}
     </header>
+  );
+}
+
+function DropdownLink({ link: c }: { link: NavLink }) {
+  return (
+    <Link
+      href={c.href}
+      className="group block rounded-xl px-3 py-2.5 transition-colors hover:bg-purple-3/10"
+    >
+      <div className="text-sm font-semibold text-fg transition-colors group-hover:text-purple-6">
+        {c.label}
+      </div>
+      {c.desc && <div className="text-xs text-fg-dim">{c.desc}</div>}
+    </Link>
   );
 }

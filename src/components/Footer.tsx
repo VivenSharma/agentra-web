@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Logo } from "./Logo";
 import { ArrowUpRight, ShieldCheck } from "lucide-react";
+import { hasPress } from "@/lib/press";
 
 function LinkedinIcon({ className = "" }: { className?: string }) {
   return (
@@ -46,6 +47,7 @@ const cols = [
     links: [
       { label: "About", href: "/company" },
       { label: "Customers", href: "/customers" },
+      ...(hasPress ? [{ label: "Press", href: "/company/press" }] : []),
       { label: "Resources", href: "/resources" },
       { label: "Trust", href: "/trust" },
       { label: "Contact", href: "/contact" },

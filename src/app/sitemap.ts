@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next";
 import { readdirSync } from "node:fs";
 import { join } from "node:path";
+import { pressArticles } from "@/lib/press";
 
 const base = "https://www.agentra-ai.com";
 
@@ -45,6 +46,9 @@ const routes: {
   { path: "/resources/blog/decision-rights-agentic-supply-chain", priority: 0.6, freq: "monthly" },
   { path: "/resources/blog/tariffs-move-weekly", priority: 0.6, freq: "monthly" },
   { path: "/company", priority: 0.7, freq: "monthly", images: teamImages() },
+  ...(pressArticles.length > 0
+    ? [{ path: "/company/press", priority: 0.6, freq: "monthly" as const }]
+    : []),
   { path: "/contact", priority: 0.7, freq: "monthly" },
   { path: "/privacy", priority: 0.3, freq: "yearly" },
   { path: "/privacy/moove", priority: 0.3, freq: "yearly" },
