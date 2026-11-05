@@ -89,7 +89,7 @@ export function IntegrationLogos() {
   return (
     <section aria-label="Systems we work with" className="border-b border-line">
       <div className="container-x grid gap-4 py-7 xl:grid-cols-[9rem_1fr] xl:items-center xl:gap-8">
-        <p className="text-sm text-fg-dim">On top of</p>
+        <p className="text-sm text-fg-dim">Acting on top of</p>
         <div className="logo-marquee overflow-hidden">
           <ul className="logo-track">
             {row(false)}

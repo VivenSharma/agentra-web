@@ -6,6 +6,7 @@ import { Nav } from "@/components/Nav";
 import { Footer } from "@/components/Footer";
 import { ScrollProgress } from "@/components/ScrollProgress";
 import { Spotlight } from "@/components/Spotlight";
+import { CookieConsent } from "@/components/CookieConsent";
 
 // Fonts are self-hosted (app/fonts, variable woff2 from Fontsource, SIL OFL)
 // rather than loaded through next/font/google, which broke Vercel builds in
@@ -157,6 +158,8 @@ export default function RootLayout({
         <main className="flex-1">{children}</main>
         <Footer />
         <Analytics />
+        {/* Consent banner; loads the LinkedIn Insight Tag only on Accept. */}
+        <CookieConsent />
       </body>
     </html>
   );

@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { Logo } from "./Logo";
 import { ArrowUpRight, ShieldCheck } from "lucide-react";
 import { hasPress } from "@/lib/press";
+import { OPEN_COOKIE_SETTINGS } from "./CookieConsent";
 
 function LinkedinIcon({ className = "" }: { className?: string }) {
   return (
@@ -135,6 +136,13 @@ export function Footer() {
               {l.label}
             </Link>
           ))}
+          <button
+            type="button"
+            onClick={() => window.dispatchEvent(new Event(OPEN_COOKIE_SETTINGS))}
+            className="link-glow text-xs font-medium uppercase tracking-[0.12em] text-fg-muted"
+          >
+            Cookie settings
+          </button>
         </div>
 
         <div className="mt-8 flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
