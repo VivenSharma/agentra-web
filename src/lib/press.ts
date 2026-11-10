@@ -16,13 +16,27 @@ export type PressArticle = {
   logo?: { src: string; width: number; height: number; plate?: boolean };
 };
 
-/* Supplied by the user on 10 Nov 2026, newest first. Headlines, dates
-   and bylines are as published on each outlet's page (checked 10 Nov
-   2026); siliconindia's page shows no date. Images: ETSupplyChain's own
-   article image; Construction World's own photo of Lalit; Express Computer
-   and siliconindia only offered small or generic images, so their cards
-   show the outlet's logo on the branded panel instead. */
+/* Coverage supplied by the user (Nov 2026). Headlines, dates and bylines
+   are as published on each outlet's page; siliconindia's page shows no
+   date. Images: the outlet's own article image where it is sharp and
+   relevant (TechGraph, ETSupplyChain), Construction World's own photo of
+   Lalit, and the outlet's logo on the branded panel where the outlet only
+   offered small or generic images (Express Computer, siliconindia).
+   The list is sorted newest first below, undated pieces last. */
 export const pressArticles: PressArticle[] = [
+  {
+    outlet: "TechGraph",
+    headline: "How AI Is Reshaping the Future of Global Trade",
+    date: "2026-10-30",
+    author: "Lalit Das",
+    url: "https://techgraph.co/ai/how-ai-is-reshaping-the-future-of-global-trade/",
+    image: {
+      src: "/press/techgraph-ai-global-trade.jpg",
+      alt: "Aerial view of stacked shipping containers and cranes at a container port",
+      width: 1000,
+      height: 563,
+    },
+  },
   {
     outlet: "ETSupplyChain",
     headline: "Can Agentic AI build truly autonomous supply chains without losing human control",
@@ -66,6 +80,9 @@ export const pressArticles: PressArticle[] = [
     logo: { src: "/press/siliconindia-logo.png", width: 266, height: 66, plate: true },
   },
 ];
+
+// newest first; pieces without a date go last
+pressArticles.sort((a, b) => (b.date ?? "").localeCompare(a.date ?? ""));
 
 // Layout preview for local development only, while pressArticles is empty.
 // Never rendered in a production build (see hasPress / pressFeed below).
