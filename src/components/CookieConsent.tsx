@@ -5,7 +5,7 @@ import Script from "next/script";
 import { useEffect, useState, useSyncExternalStore } from "react";
 
 // Cookie consent, per the Cookie Policy: non-essential cookies (here the
-// LinkedIn Insight Tag) run only after the visitor clicks Accept. The choice
+// LinkedIn Insight Tag and HubSpot tracking code) run only after the visitor clicks Accept. The choice
 // is kept in localStorage; "Cookie settings" in the footer reopens the banner.
 
 type Choice = "accepted" | "rejected";
@@ -93,6 +93,15 @@ b.src = "https://snap.licdn.com/li.lms-analytics/insight.min.js";
 s.parentNode.insertBefore(b, s);})(window.lintrk);
 `}
           </Script>
+      )}
+
+      {choice === "accepted" && (
+        // HubSpot tracking code (hub 247909679).
+        <Script
+          id="hs-script-loader"
+          src="https://js-na2.hs-scripts.com/247909679.js"
+          strategy="afterInteractive"
+        />
       )}
 
       {open && (
