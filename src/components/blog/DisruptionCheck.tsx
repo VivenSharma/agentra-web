@@ -10,10 +10,9 @@ import { ArrowLeft, ArrowRight, BadgeCheck, RotateCcw } from "lucide-react";
    the site's own components. Questions, bands, result copy and scoring are
    verbatim from that file; only the layout and motion are new.
 
-   Leads: the start step is a real <form> with standard field names, so the
-   HubSpot tracking code (loaded after cookie consent) can collect it as a
-   non-HubSpot form. submitLead() also calls window.agentraLead, the hook the
-   original file exposed, with the lead on start and again with the score. */
+   Leads: submitLead() sends the lead to the HubSpot form on start and again
+   with the score on completion (see HUBSPOT_SUBMIT below), and also calls
+   window.agentraLead, the hook the original file exposed. */
 
 const SECTIONS = [
   {
@@ -104,7 +103,42 @@ declare global {
   }
 }
 
+/* HubSpot form "Inbound Freight Disruption Check" (account 247909679),
+   created 10 Nov 2026. Submissions go to HubSpot's Forms API: once when the
+   check starts (so an abandoned check still leaves the lead) and again with
+   the score when it finishes. The visitor ticks the contact consent box
+   before either is sent. Field names are HubSpot property internal names;
+   disruption_check_score is the custom number property made for this form. */
+const HUBSPOT_SUBMIT =
+  "https://api.hsforms.com/submissions/v3/integration/submit/247909679/3ad27ae2-5e52-4c31-8e2b-afafe809afe6";
+
+function sendToHubSpot(payload: Record<string, unknown>) {
+  const v = (k: string) => (payload[k] == null ? "" : String(payload[k]));
+  const fields = [
+    { name: "firstname", value: v("name") },
+    { name: "email", value: v("email") },
+    { name: "company", value: v("company") },
+    { name: "jobtitle", value: v("role") },
+  ];
+  if (payload.score != null) fields.push({ name: "disruption_check_score", value: v("score") });
+  // HubSpot's visitor cookie, present only if the visitor accepted cookies;
+  // it links the submission to their earlier page views
+  const hutk = document.cookie.match(/(?:^|;\s*)hubspotutk=([^;]+)/)?.[1];
+  fetch(HUBSPOT_SUBMIT, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    keepalive: true,
+    body: JSON.stringify({
+      fields,
+      context: { pageUri: window.location.href, pageName: document.title, ...(hutk ? { hutk } : {}) },
+    }),
+  }).catch(() => {
+    /* never block the quiz on a network error */
+  });
+}
+
 function submitLead(payload: Record<string, unknown>) {
+  sendToHubSpot(payload);
   try {
     window.agentraLead?.(payload);
   } catch {
