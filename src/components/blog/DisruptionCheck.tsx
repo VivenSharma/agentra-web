@@ -3,7 +3,8 @@
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import Link from "next/link";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
-import { ArrowLeft, ArrowRight, BadgeCheck, RotateCcw } from "lucide-react";
+import { ArrowLeft, ArrowRight, BadgeCheck, LoaderCircle, RotateCcw } from "lucide-react";
+import { checkEmailFormat } from "@/lib/email-check";
 
 /* Inbound Freight Disruption Check: Marketing's 10-question self-assessment
    ("Inbound Freight Disruption Check · Agentra" HTML, Nov 2026), rebuilt in
@@ -300,20 +301,44 @@ function StartForm({ onStart }: { onStart: (l: Lead) => void }) {
   const [consent, setConsent] = useState(false);
   const [bad, setBad] = useState<Partial<Record<keyof Lead, boolean>>>({});
   const [msg, setMsg] = useState("");
+  const [emailMsg, setEmailMsg] = useState("");
+  const [checking, setChecking] = useState(false);
 
-  const submit = (e: FormEvent) => {
+  /* The work email must look real: format and junk rules here, then the
+     server confirms the domain can receive mail (api/check-email). If the
+     server can't be reached, the visitor carries on rather than being
+     stopped by our own outage. */
+  const submit = async (e: FormEvent) => {
     e.preventDefault();
-    const t = { name: f.name.trim(), email: f.email.trim(), company: f.company.trim(), role: f.role };
-    const errs = {
-      name: !t.name,
-      email: !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(t.email),
-      company: !t.company,
-      role: !t.role,
-    };
+    if (checking) return;
+    const t = { name: f.name.trim(), email: f.email.trim().toLowerCase(), company: f.company.trim(), role: f.role };
+    const emailProblem = t.email ? checkEmailFormat(t.email) : "Please enter your work email.";
+    const errs = { name: !t.name, email: !!emailProblem, company: !t.company, role: !t.role };
     setBad(errs);
+    setEmailMsg(emailProblem ?? "");
     if (Object.values(errs).some(Boolean)) return setMsg("Please fill in the highlighted fields.");
     if (!consent) return setMsg("Please tick the box to continue.");
     setMsg("");
+
+    setChecking(true);
+    try {
+      const res = await fetch("/api/check-email", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: t.email }),
+      });
+      const data = (await res.json()) as { ok?: boolean; message?: string };
+      if (data.ok === false) {
+        setBad({ email: true });
+        setEmailMsg(data.message ?? "Please check your work email.");
+        setMsg("Please fill in the highlighted fields.");
+        return;
+      }
+    } catch {
+      /* check unavailable: let the visitor continue */
+    } finally {
+      setChecking(false);
+    }
     onStart(t);
   };
 
@@ -328,19 +353,37 @@ function StartForm({ onStart }: { onStart: (l: Lead) => void }) {
       <p className="mt-1.5 text-base text-fg-muted">Your score appears on screen the moment you finish.</p>
 
       <div className="mt-6 grid gap-5 sm:grid-cols-2">
-        <label className="grid gap-2">
+        <label className="grid content-start gap-2">
           <span className="text-sm font-medium text-fg">First name</span>
           <input name="firstname" autoComplete="given-name" placeholder="Your first name" className={field("name")} value={f.name} onChange={(e) => setF({ ...f, name: e.target.value })} aria-invalid={bad.name || undefined} />
         </label>
-        <label className="grid gap-2">
+        <label className="grid content-start gap-2">
           <span className="text-sm font-medium text-fg">Work email</span>
-          <input name="email" type="email" autoComplete="email" placeholder="name@company.com" className={field("email")} value={f.email} onChange={(e) => setF({ ...f, email: e.target.value })} aria-invalid={bad.email || undefined} />
+          <input
+            name="email"
+            type="email"
+            autoComplete="email"
+            placeholder="name@company.com"
+            className={field("email")}
+            value={f.email}
+            onChange={(e) => {
+              setF({ ...f, email: e.target.value });
+              if (emailMsg) setEmailMsg("");
+            }}
+            aria-invalid={bad.email || undefined}
+            aria-describedby={emailMsg ? "dc-email-error" : undefined}
+          />
+          {emailMsg && (
+            <span id="dc-email-error" className="text-sm text-rose-300">
+              {emailMsg}
+            </span>
+          )}
         </label>
-        <label className="grid gap-2">
+        <label className="grid content-start gap-2">
           <span className="text-sm font-medium text-fg">Company</span>
           <input name="company" autoComplete="organization" placeholder="Company name" className={field("company")} value={f.company} onChange={(e) => setF({ ...f, company: e.target.value })} aria-invalid={bad.company || undefined} />
         </label>
-        <label className="grid gap-2">
+        <label className="grid content-start gap-2">
           <span className="text-sm font-medium text-fg">Your role</span>
           <select name="jobtitle" className={`${field("role")} appearance-none bg-[url('data:image/svg+xml,%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22%20width=%2212%22%20height=%2212%22%20fill=%22none%22%20stroke=%22%23b89bf5%22%20stroke-width=%222%22%3E%3Cpath%20d=%22m2%204%204%204%204-4%22/%3E%3C/svg%3E')] bg-[position:right_1rem_center] bg-no-repeat pr-10 ${f.role ? "" : "text-fg-dim"}`} value={f.role} onChange={(e) => setF({ ...f, role: e.target.value })} aria-invalid={bad.role || undefined}>
             <option value="">Choose one</option>
@@ -362,9 +405,17 @@ function StartForm({ onStart }: { onStart: (l: Lead) => void }) {
 
       <div className="mt-2 flex flex-col-reverse gap-4 sm:flex-row sm:items-center sm:justify-between">
         <p className="text-sm text-fg-dim">Tip: answer with the people who handle delays every day.</p>
-        <button type="submit" className="btn-primary group inline-flex items-center justify-center gap-2 px-7 py-3.5 text-sm font-semibold transition-all hover:-translate-y-0.5 active:scale-[0.98]">
-          Start the check
-          <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" aria-hidden />
+        <button
+          type="submit"
+          disabled={checking}
+          className="btn-primary group inline-flex items-center justify-center gap-2 px-7 py-3.5 text-sm font-semibold transition-all enabled:hover:-translate-y-0.5 enabled:active:scale-[0.98] disabled:cursor-wait disabled:opacity-70"
+        >
+          {checking ? "Checking your email" : "Start the check"}
+          {checking ? (
+            <LoaderCircle className="h-4 w-4 animate-spin" aria-hidden />
+          ) : (
+            <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" aria-hidden />
+          )}
         </button>
       </div>
     </form>

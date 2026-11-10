@@ -200,7 +200,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
         <div className="container-x mt-12">
           <div className="mx-auto grid max-w-[760px] gap-12 xl:max-w-[1080px] xl:grid-cols-[220px_760px] xl:justify-between">
             <aside className="hidden xl:block">
-              <ArticleToc items={toc} />
+              <ArticleToc items={toc} cta={hasQuiz ? { id: "disruption-check", text: "Take the 3-minute check" } : undefined} />
             </aside>
             <div className="min-w-0 space-y-6 text-lg leading-relaxed text-fg-muted">
               {a.body.map((b, i) => (
