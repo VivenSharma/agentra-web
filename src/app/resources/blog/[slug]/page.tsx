@@ -1,11 +1,18 @@
 import type { Metadata } from "next";
-import type { ReactNode } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, ArrowRight } from "lucide-react";
 import { CTA } from "@/components/CTA";
+import { Reveal } from "@/components/Reveal";
 import { ArticleEmbed } from "@/components/ArticleEmbed";
+import { ArticleToc } from "@/components/blog/ArticleToc";
+import { DisruptionCheck } from "@/components/blog/DisruptionCheck";
+import { Inline } from "@/components/blog/Inline";
+import { ProofCards } from "@/components/blog/ProofCards";
+import { DelayChain } from "@/components/viz/DelayChain";
+import { FreightLevels } from "@/components/viz/FreightLevels";
+import { GovernedExecution } from "@/components/viz/GovernedExecution";
 import { ReplenishmentLoop } from "@/components/viz/ReplenishmentLoop";
 import { articles, getArticle, type Block } from "@/lib/articles";
 
@@ -30,51 +37,25 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   };
 }
 
-const linkClass =
-  "text-purple-5 underline decoration-purple-4/40 underline-offset-4 transition-colors hover:text-purple-6";
+// Section headings get an id so the "On this page" list can link to them
+const slugify = (t: string) =>
+  t.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
 
-// Inline marks used in the article copy: **bold** and [text](url).
-function Inline({ text }: { text: string }) {
-  const parts: ReactNode[] = [];
-  const re = /\*\*(.+?)\*\*|\[(.+?)\]\((.+?)\)/g;
-  let last = 0;
-  for (const m of text.matchAll(re)) {
-    if (m.index > last) parts.push(text.slice(last, m.index));
-    if (m[1]) {
-      parts.push(
-        <strong key={m.index} className="font-semibold text-fg">
-          <Inline text={m[1]} />
-        </strong>,
-      );
-    } else if (m[3].startsWith("/")) {
-      parts.push(
-        <Link key={m.index} href={m[3]} className={linkClass}>
-          {m[2]}
-        </Link>,
-      );
-    } else {
-      parts.push(
-        <a
-          key={m.index}
-          href={m[3]}
-          target="_blank"
-          rel="noopener noreferrer"
-          className={linkClass}
-        >
-          {m[2]}
-        </a>,
-      );
-    }
-    last = m.index + m[0].length;
-  }
-  if (last < text.length) parts.push(text.slice(last));
-  return <>{parts}</>;
-}
+const vizMap = {
+  "replenishment-loop": ReplenishmentLoop,
+  "freight-levels": FreightLevels,
+  "delay-chain": DelayChain,
+  "governed-execution": GovernedExecution,
+};
 
 function BlockView({ b }: { b: Block }) {
   switch (b.type) {
     case "h2":
-      return <h2 className="pt-6 text-2xl font-light leading-snug tracking-tight text-fg sm:text-3xl">{b.text}</h2>;
+      return (
+        <h2 id={slugify(b.text)} className="scroll-mt-28 pt-6 text-2xl font-light leading-snug tracking-tight text-fg sm:text-3xl">
+          {b.text}
+        </h2>
+      );
     case "h3":
       return <h3 className="pt-2 text-lg font-medium text-fg">{b.text}</h3>;
     case "p":
@@ -148,12 +129,19 @@ function BlockView({ b }: { b: Block }) {
       );
     case "embed":
       return <ArticleEmbed src={b.src} title={b.title} />;
-    case "viz":
+    case "viz": {
+      const Viz = vizMap[b.name];
       return (
         <div className="py-2">
-          <ReplenishmentLoop />
+          <Viz />
         </div>
       );
+    }
+    case "proof":
+      return <ProofCards items={b.items} />;
+    case "quiz":
+      // rendered full width after the article body
+      return null;
   }
 }
 
@@ -161,6 +149,12 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
   const { slug } = await params;
   const a = getArticle(slug);
   if (!a) notFound();
+
+  const toc = a.body.flatMap((b) => (b.type === "h2" ? [{ id: slugify(b.text), text: b.text }] : []));
+  const hasQuiz = a.body.some((b) => b.type === "quiz");
+  // the next two articles in the list, wrapping round
+  const at = articles.findIndex((x) => x.slug === a.slug);
+  const more = [1, 2].map((k) => articles[(at + k) % articles.length]).filter((x) => x.slug !== a.slug);
 
   return (
     <>
@@ -189,25 +183,40 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
 
         <div className="container-x mt-10">
           <div className="mx-auto max-w-[1000px]">
-            <Image
-              src={a.cover.src}
-              alt={a.cover.alt}
-              width={a.cover.width}
-              height={a.cover.height}
-              priority
-              sizes="(min-width: 1100px) 1000px, 100vw"
-              className="fade-up h-auto w-full rounded-[24px] ring-1 ring-white/10 [animation-delay:160ms]"
-            />
+            <div className="fade-up overflow-hidden rounded-[24px] ring-1 ring-white/10 shadow-[0_40px_120px_-60px_rgba(128,85,226,0.8)] [animation-delay:160ms]">
+              <Image
+                src={a.cover.src}
+                alt={a.cover.alt}
+                width={a.cover.width}
+                height={a.cover.height}
+                priority
+                sizes="(min-width: 1100px) 1000px, 100vw"
+                className="ken-burns h-auto w-full"
+              />
+            </div>
           </div>
         </div>
 
         <div className="container-x mt-12">
-          <div className="mx-auto max-w-[760px] space-y-6 text-lg leading-relaxed text-fg-muted">
-            {a.body.map((b, i) => (
-              <BlockView key={i} b={b} />
-            ))}
+          <div className="mx-auto grid max-w-[760px] gap-12 xl:max-w-[1080px] xl:grid-cols-[220px_760px] xl:justify-between">
+            <aside className="hidden xl:block">
+              <ArticleToc items={toc} />
+            </aside>
+            <div className="min-w-0 space-y-6 text-lg leading-relaxed text-fg-muted">
+              {a.body.map((b, i) => (
+                <BlockView key={i} b={b} />
+              ))}
+            </div>
           </div>
         </div>
+
+        {hasQuiz && (
+          <div className="container-x mt-16">
+            <div className="mx-auto max-w-[1080px]">
+              <DisruptionCheck />
+            </div>
+          </div>
+        )}
 
         {a.banner && (
           <div className="container-x mt-12">
@@ -236,6 +245,42 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
           </aside>
         )}
       </article>
+
+      {more.length > 0 && (
+        <section aria-labelledby="keep-reading" className="pb-8">
+          <div className="container-x">
+            <div className="mx-auto max-w-[1080px]">
+              <h2 id="keep-reading" className="text-2xl font-light tracking-tight text-fg">Keep reading</h2>
+              <div className="mt-6 grid gap-5 md:grid-cols-2">
+                {more.map((m, k) => (
+                  <Reveal key={m.slug} delay={k * 0.08}>
+                    <Link href={`/resources/blog/${m.slug}`} className="raised spotlight group flex h-full flex-col overflow-hidden rounded-[22px]">
+                      <div className="overflow-hidden">
+                        <Image
+                          src={m.cover.src}
+                          alt={m.cover.alt}
+                          width={m.cover.width}
+                          height={m.cover.height}
+                          sizes="(min-width: 768px) 520px, 100vw"
+                          className="h-auto w-full transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.04]"
+                        />
+                      </div>
+                      <div className="flex flex-1 flex-col p-6">
+                        <p className="text-sm text-fg-dim">{m.readMins} min read</p>
+                        <h3 className="mt-2 text-xl font-light leading-snug text-fg transition-colors duration-300 group-hover:text-purple-6">{m.title}</h3>
+                        <span className="mt-auto inline-flex items-center gap-1.5 pt-5 text-sm font-semibold text-fg">
+                          Read article
+                          <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" aria-hidden />
+                        </span>
+                      </div>
+                    </Link>
+                  </Reveal>
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
 
       <CTA />
     </>

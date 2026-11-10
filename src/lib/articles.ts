@@ -15,7 +15,11 @@ export type Block =
   // A self-contained interactive page from /public/embeds, shown in an iframe
   | { type: "embed"; src: string; title: string }
   // A diagram rebuilt as a live component (components/viz), in place of a flat graphic
-  | { type: "viz"; name: "replenishment-loop" };
+  | { type: "viz"; name: "replenishment-loop" | "freight-levels" | "delay-chain" | "governed-execution" }
+  // "Delivered" client results, as cards whose figures count up on screen
+  | { type: "proof"; items: { client: string; text: string; stats: { value: string; label: string }[] }[] }
+  // The interactive Inbound Freight Disruption Check (components/blog/DisruptionCheck)
+  | { type: "quiz" };
 
 export type Article = {
   slug: string;
@@ -35,9 +39,156 @@ export type Article = {
 
 const img = (name: string) => `/blog/tariffs-move-weekly/${name}.png`;
 const rights = (name: string) => `/blog/decision-rights-agentic-supply-chain/${name}.png`;
+const freight = (name: string) => `/blog/inbound-freight-management-agentic-ai/${name}.png`;
 const fresh = (name: string) => `/blog/daily-demand-sensing-store-replenishment/${name}.png`;
 
 export const articles: Article[] = [
+  {
+    slug: "inbound-freight-management-agentic-ai",
+    title: "Inbound Freight Management: How Agentic AI Helps Manufacturers",
+    description:
+      "How agentic AI connects data from every freight forwarder, finds inbound freight savings and acts on delays before production feels them.",
+    dek: "How agentic AI connects data from every freight forwarder, finds inbound freight savings and acts on delays before production feels them.",
+    readMins: 7,
+    cover: {
+      src: freight("cover"),
+      alt: "Logistics coordinator at dawn viewing scattered forwarder updates beside one clear view of inbound freight, with an agent recommendation waiting for approval",
+      width: 2400,
+      height: 1350,
+    },
+    body: [
+      { type: "h2", text: "Three forwarders, one truth" },
+      { type: "p", text: "Most manufacturers that buy components and finished goods overseas rely on several freight forwarders, and each one reports in its own way: a portal export from one, a weekly spreadsheet from another, an email with a revised arrival date from a third. The information is there, but it cannot be compared until someone reconciles it by hand." },
+      { type: "p", text: "As a result, logistics teams spend hours collecting, cleaning and checking data before they can decide anything. Forwarder performance is hard to compare, savings are found late, and a delay at sea is rarely connected in time to the purchase order, the stock level or the production line it will affect." },
+      { type: "p", text: "Freight forwarder visibility is therefore more than tracking. It means one trusted view of the whole inbound network: where every shipment is, what it costs and what it puts at risk." },
+      { type: "quote", text: "How do you make good freight decisions when the information you need is spread across several partners?" },
+
+      { type: "h2", text: "Why inbound freight across several forwarders is hard to manage" },
+      { type: "p", text: "Working with several forwarders gives access to more routes, modes and capacity. It also creates three problems." },
+      { type: "h3", text: "1. Shipment information is fragmented" },
+      { type: "p", text: "Each forwarder has its own portal, shipment references, status definitions and reporting rhythm. One marks a container as departed when it enters the terminal, another when the vessel sails. Teams reconcile this by hand, so the view of locations, delays and arrival dates always lags reality." },
+      { type: "h3", text: "2. Inconsistent data makes cost comparison unreliable" },
+      { type: "p", text: "Forwarders report cost on different bases:" },
+      {
+        type: "list",
+        items: [
+          "**Units:** per kilogram or per tonne, per shipment or per container.",
+          "**Periods:** monthly in one report, quarterly in another.",
+          "**Scope:** Incoterms decide which legs the buyer pays for, so the same lane can carry different cost elements.",
+          "**Charge structure:** base freight, surcharges, terminal handling and destination charges are split differently by each partner.",
+        ],
+      },
+      { type: "p", text: "Without standardising these, teams compare unlike costs. Destination and handling charges can rival the base rate itself, so a lower quoted rate does not always mean a lower total freight cost." },
+      { type: "h3", text: "3. Utilisation, mode and emissions stay hidden" },
+      { type: "p", text: "Scattered data hides the biggest efficiency levers:" },
+      {
+        type: "list",
+        items: [
+          "**Consolidation:** small less-than-container-load (LCL) shipments on the same lane in the same week could often travel as one full container load (FCL).",
+          "**Container fill:** a container can be full by weight and half empty by volume. Dense metal parts reach the weight limit long before the box is full; light, bulky goods do the opposite. Without both measures, fill rates mislead.",
+          "**Mode:** air carries a small share of volume but a large share of freight cost and transport emissions. Every reactive air shipment is a planning signal.",
+        ],
+      },
+      { type: "p", text: "These levers only appear when cost, volume, transit time and emissions sit on one record. The problem is not managing a few forwarders. It is the lack of comparable, trusted data to decide with." },
+
+      { type: "h2", text: "Why shipment visibility alone is not enough" },
+      { type: "p", text: "Visibility platforms do an important job: they tell you where a shipment is. Most manufacturers already run one, and they should keep it. But knowing where a container is does not tell you what it costs, what it puts at risk or what to do next." },
+      { type: "viz", name: "freight-levels" },
+      { type: "h3", text: "From tracking delays to managing their impact" },
+      { type: "p", text: "When a tracking system flags a delay, the supply chain team still needs four answers:" },
+      {
+        type: "list",
+        items: [
+          "**What is affected?** Which purchase order, material or customer order is at risk?",
+          "**How urgent is it?** Will production or a customer commitment suffer, and when?",
+          "**What are the options?** Wait, expedite only the shortfall, use stock from another site or adjust the plan?",
+          "**Who decides, and how is it executed?** Who approves, and which systems and partners need to act?",
+        ],
+      },
+      { type: "p", text: "Answering them means linking each shipment to the orders, inventory and plans it serves." },
+      { type: "p", text: "**This is where agentic AI adds value:** it connects forwarder data with enterprise context, evaluates options, recommends actions and coordinates approved workflows, while people keep control of the decisions." },
+
+      { type: "h2", text: "How Agentra transforms inbound freight management" },
+      { type: "p", text: "Agentra is an agentic AI platform built for supply chain. It moves manufacturers from tracking shipments to coordinated freight decisions: agents collect the data, read it in its business context and help teams act on risks and opportunities." },
+      { type: "h3", text: "Connect information across systems" },
+      { type: "p", text: "Inbound freight data lives in forwarder portals, emails, spreadsheets, the ERP, the transport management system (TMS) and the visibility platform. Agentra connects to all of them and works on top. No rip-and-replace: the systems you run today stay in place." },
+      { type: "h3", text: "Standardise and reconcile freight data" },
+      { type: "p", text: "Connected data only helps if it is comparable. Agents align units, dates and references, link every shipment to its purchase order and flag charge discrepancies, removing most of the manual reconciliation." },
+      { type: "h3", text: "Build one view of inbound freight" },
+      { type: "p", text: "Agentra’s supply chain ontology, a live model of how shipments, purchase orders, suppliers, lanes and sites relate to each other, places every shipment in its operational context. Each forwarder’s dashboard shows its own slice of the network. This shows the whole of it." },
+      { type: "h3", text: "Find freight cost opportunities" },
+      { type: "p", text: "Agents compare logistics data to find savings without breaking delivery requirements:" },
+      {
+        type: "list",
+        items: [
+          "**Compare forwarders:** rates, transit times and reliability on comparable lanes.",
+          "**Consolidate shipments:** recurring LCL flows that could move as FCL.",
+          "**Improve container fill:** the right container size, with weight and volume both in view.",
+          "**Rethink mode:** air shipments that could move by sea with earlier planning.",
+        ],
+      },
+      { type: "p", text: "Each option is evaluated on total cost, transit time, emissions and operational requirements." },
+      { type: "h3", text: "Connect delivery events to business decisions" },
+      { type: "p", text: "A delay matters when it reaches material availability or production. An agent connects the chain: shipment delay → affected purchase order → material shortage → production risk. It then compares the options (wait, expedite only the shortfall, rebalance stock, reroute) and recommends the lowest-cost response that avoids a stock-out." },
+      { type: "viz", name: "delay-chain" },
+      { type: "h3", text: "Test disruption before it happens" },
+      { type: "p", text: "Some disruptions do not hit one shipment; they hit a whole lane. A Red Sea closure, a typhoon season in South China or congestion at a hub port changes transit times for every container on the route. With the network on one record, agents can run these scenarios in advance: which shipments, suppliers and sites are exposed, how many days are added, what it costs, and which response protects service at the lowest cost. The disruption is tested on screen before it is felt on the production line." },
+
+      { type: "h2", text: "Agentra in practice" },
+      { type: "p", text: "Agentra brings enterprise systems, logistics partners and agentic workflows together in one operating layer, with shared supply chain context and governed execution. It comes with **1,000+ pre-built connectors** to ERP, TMS and logistics provider systems, and an SDK for anything else. A proof of value typically runs in **4 to 6 weeks**, and deployments go live in **8 to 12 weeks**." },
+      {
+        type: "proof",
+        items: [
+          {
+            client: "A global electronics manufacturer.",
+            text: "**3,000+ purchase orders a month** booked from SAP to forwarders with no re-keying, across 15+ forwarder booking templates, with alerts raised before a delay hits the promised date.",
+            stats: [
+              { value: "3,000+", label: "purchase orders a month" },
+              { value: "15+", label: "forwarder booking templates" },
+            ],
+          },
+          {
+            client: "A global high-precision industrial manufacturer.",
+            text: "**29 logistics providers** orchestrated on one layer and one shipment record, running on Microsoft Dynamics 365. Results measured in phase 1: **7.69% lower logistics spend** and **5,000+ hours of manual work saved a year**.",
+            stats: [
+              { value: "29", label: "logistics providers" },
+              { value: "7.69%", label: "lower logistics spend" },
+              { value: "5,000+", label: "hours saved a year" },
+            ],
+          },
+        ],
+      },
+      { type: "p", text: "Together they show the two foundations of inbound freight management: one record across many logistics providers, and purchase orders flowing to forwarders without re-keying." },
+
+      { type: "h2", text: "From recommendation to execution: people stay in control" },
+      { type: "p", text: "Agentic AI does not mean handing every decision to a machine. It means removing the manual effort of spotting issues, evaluating options and coordinating actions." },
+      { type: "p", text: "When a shipment is delayed, an agent identifies the affected order, assesses the impact and recommends a response such as expediting or rebooking. Routine updates follow predefined workflows." },
+      { type: "quote", text: "The right humans in the loop, not humans in the way: coordinators approve rebookings and anything a customer will notice." },
+      { type: "p", text: "With Agentra, you set the level of autonomy for each workflow: observe, recommend, act with approval, or act on its own within policy. Autonomy is earned. A workflow moves up only when its accuracy has been proven, and only when you decide." },
+      { type: "viz", name: "governed-execution" },
+      { type: "h3", text: "How Agentra keeps execution governed" },
+      {
+        type: "list",
+        items: [
+          "**Decision rights:** which actions each agent is allowed to take.",
+          "**Approval thresholds:** limits on cost, risk and business commitments.",
+          "**Role-based permissions:** who can see which information and who approves.",
+          "**Audit trails:** source, record and timestamp for every decision, approval and action.",
+          "**Escalation:** anything outside the limits goes to the right person.",
+        ],
+      },
+      { type: "p", text: "**Autonomy does not mean giving up control. Agents work inside the boundaries you set, and people keep authority over the decisions that matter.**" },
+
+      { type: "h2", text: "Conclusion: from freight visibility to informed action" },
+      { type: "p", text: "Getting a clear picture of inbound freight should not take hours of follow-ups and reconciliation." },
+      { type: "p", text: "Manufacturers need to bring this information together, see what needs attention and decide what to do next, before a delay reaches the production line." },
+      { type: "p", text: "Agentra connects the systems you already run, surfaces risks and savings, and coordinates action within your business rules." },
+      { type: "p", text: "**Less time chasing shipment updates. More time making decisions.**" },
+      { type: "p", text: "**Your supply chain, acting on what it knows. You stay in command.**" },
+      { type: "cta", text: "See how Agentra turns fragmented forwarder data into coordinated inbound freight decisions. **[Book a 30-minute walkthrough.](/contact)**" },
+      { type: "quiz" },
+    ],
+  },
   {
     slug: "daily-demand-sensing-store-replenishment",
     title: "Daily Demand Sensing and Store Replenishment for Fresh Food Chains",
