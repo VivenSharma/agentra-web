@@ -19,8 +19,8 @@ function teamImages(): string[] {
   }
 }
 
-// Live, indexable routes. Resources (blog/whitepapers/podcasts) are excluded
-// until the pieces themselves are published, so we don't index empty pages.
+// Live, indexable routes. Only published Resources pages are listed, so we
+// don't index empty sections.
 const routes: {
   path: string;
   priority: number;
