@@ -449,6 +449,33 @@ export const solutionDetail: Record<
 // Write-ups are Marketing's; questions are from the video's own captions.
 export const podcasts = [
   {
+    slug: "vishal-lakhanpal",
+    episode: "Episode 02",
+    title: "Introducing Agentra: Vishal Lakhanpal",
+    writeUp: [
+      "Part 1 of Introducing Agentra. Vishal Lakhanpal, Director, MEA, sits down with host Inderpreet to explain what Agentra is, who built it and why it focuses on supply chains alone.",
+      "He walks through what makes something a real AI agent, the ontology underneath the platform, how Agentra works as a layer over the systems a company already runs, and how each organization decides how much autonomy its agents get.",
+    ],
+    tagline: "Context is the new currency, and action is the return.",
+    duration: "9 min",
+    video: "/podcasts/vishal-lakhanpal.mp4",
+    poster: "/podcasts/vishal-lakhanpal-poster.jpg",
+    questions: [
+      "What exactly is Agentra, and what problem is it trying to solve?",
+      "Who founded Agentra, and what experience does he bring?",
+      "Why did Agentra choose to focus specifically on supply chains?",
+      "What is Agentra’s mission?",
+      "What is the larger vision behind the company?",
+      "What actually makes something an AI agent?",
+      "What sits underneath the agents, and what makes the platform structurally different?",
+      "Can you explain how Agentra works in simple terms?",
+      "Does a company have to replace its existing technology to use Agentra?",
+      "Where can these agents make a practical difference?",
+      "If agents can take action, how does Agentra ensure companies remain in control?",
+      "Ultimately, what change does Agentra want to bring to supply chain operations?",
+    ],
+  },
+  {
     slug: "sudip-lahiri",
     episode: "Episode 01",
     title: "Advisory Series: Sudip Lahiri",
