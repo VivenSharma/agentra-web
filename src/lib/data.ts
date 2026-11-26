@@ -449,6 +449,26 @@ export const solutionDetail: Record<
 // Write-ups are Marketing's; questions are from the video's own captions.
 export const podcasts = [
   {
+    slug: "vishal-lakhanpal-part-2",
+    episode: "Part 2",
+    title: "Introducing Agentra: Vishal Lakhanpal",
+    writeUp: [
+      "The second part of our Introducing Agentra series, From Control Tower to Action. Vishal Lakhanpal, Director, MEA, returns with host Inderpreet to talk about what happens after the alert, and how agentic AI closes the gap between seeing a disruption and resolving it.",
+      "He explains why every response has to be checked against the wider network, why each recommendation needs a clear trace, where most companies sit on the path from control tower to AI action center, and how people stay in charge of the decisions that need their judgment.",
+    ],
+    tagline: "Visibility is the starting point. Action is the deliverable.",
+    duration: "4 min",
+    video: "/podcasts/vishal-lakhanpal-part-2.mp4",
+    poster: "/podcasts/vishal-lakhanpal-part-2-poster.jpg",
+    questions: [
+      "Where can agentic AI make a difference after the alert?",
+      "Why is the network view so important?",
+      "Can anyone trust an AI recommendation?",
+      "Where are most companies on that journey today?",
+      "Where do people remain involved?",
+    ],
+  },
+  {
     slug: "vishal-lakhanpal",
     episode: "Part 1",
     title: "Introducing Agentra: Vishal Lakhanpal",
