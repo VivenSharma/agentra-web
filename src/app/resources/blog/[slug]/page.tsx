@@ -14,6 +14,8 @@ import { DelayChain } from "@/components/viz/DelayChain";
 import { FreightLevels } from "@/components/viz/FreightLevels";
 import { GovernedExecution } from "@/components/viz/GovernedExecution";
 import { ReplenishmentLoop } from "@/components/viz/ReplenishmentLoop";
+import { PoRouting } from "@/components/viz/PoRouting";
+import { AutonomyContext } from "@/components/viz/AutonomyContext";
 import { articles, getArticle, type Block } from "@/lib/articles";
 
 export function generateStaticParams() {
@@ -46,6 +48,8 @@ const vizMap = {
   "freight-levels": FreightLevels,
   "delay-chain": DelayChain,
   "governed-execution": GovernedExecution,
+  "po-routing": PoRouting,
+  "autonomy-context": AutonomyContext,
 };
 
 function BlockView({ b }: { b: Block }) {

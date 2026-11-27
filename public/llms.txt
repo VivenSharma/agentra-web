@@ -18,5 +18,18 @@ Note on identity: Agentra B.V. (agentra-ai.com) is focused specifically on the a
 - [Company](https://www.agentra-ai.com/company): team, mission and global presence.
 - [Contact](https://www.agentra-ai.com/contact): book a demo.
 
+## Blog
+- [The Hidden PO Cost of a DC Network Transition](https://www.agentra-ai.com/resources/blog/dc-network-transition-open-pos)
+- [Human-in-the-Loop AI in Supply Chains: How Much Human Oversight Is Enough?](https://www.agentra-ai.com/resources/blog/human-in-the-loop-ai-supply-chain)
+- [When Seasonal Demand Drops: Re-planning Freight in a Season, Not a Year](https://www.agentra-ai.com/resources/blog/seasonal-demand-freight-planning-diagnostics)
+- [Why Medtech Exceptions Take Days, and How Agents Take Them to Minutes](https://www.agentra-ai.com/resources/blog/medtech-supply-chain-exceptions)
+- [Instrument Launches Are a Logistics Problem](https://www.agentra-ai.com/resources/blog/instrument-launch-logistics)
+- [Continuous S&OP for Consumer Electronics: Why It Matters](https://www.agentra-ai.com/resources/blog/continuous-sop-consumer-electronics)
+- [Freight Bill Auditing in India: Why Manufacturers Need to Check Every Invoice Before Payment](https://www.agentra-ai.com/resources/blog/freight-bill-auditing-india)
+- [Inbound Freight Management: How Agentic AI Helps Manufacturers](https://www.agentra-ai.com/resources/blog/inbound-freight-management-agentic-ai)
+- [Daily Demand Sensing and Store Replenishment for Fresh Food Chains](https://www.agentra-ai.com/resources/blog/daily-demand-sensing-store-replenishment)
+- [Who signs off when an AI agent acts? Decision rights for supply chain leaders](https://www.agentra-ai.com/resources/blog/decision-rights-agentic-supply-chain)
+- [Tariffs move weekly. Your S&OE should too](https://www.agentra-ai.com/resources/blog/tariffs-move-weekly)
+
 ## Contact
 Book a demo at https://www.agentra-ai.com/contact

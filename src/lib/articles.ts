@@ -15,7 +15,16 @@ export type Block =
   // A self-contained interactive page from /public/embeds, shown in an iframe
   | { type: "embed"; src: string; title: string }
   // A diagram rebuilt as a live component (components/viz), in place of a flat graphic
-  | { type: "viz"; name: "replenishment-loop" | "freight-levels" | "delay-chain" | "governed-execution" }
+  | {
+      type: "viz";
+      name:
+        | "replenishment-loop"
+        | "freight-levels"
+        | "delay-chain"
+        | "governed-execution"
+        | "po-routing"
+        | "autonomy-context";
+    }
   // "Delivered" client results, as cards whose figures count up on screen
   | { type: "proof"; items: { client: string; text: string; stats: { value: string; label: string }[] }[] }
   // The interactive Inbound Freight Disruption Check (components/blog/DisruptionCheck)
@@ -30,6 +39,9 @@ export type Article = {
   description?: string;
   dek: string;
   readMins: number;
+  // The solution page(s) this post supports. Each post links to them and each
+  // solution page lists its posts, so blog and product pages link both ways.
+  solutions?: ("planning" | "resilience" | "execution" | "orchestration")[];
   cover: { src: string; alt: string; width: number; height: number };
   body: Block[];
   // Closing banner (the whitepaper launch) and the boilerplate under it
@@ -44,7 +56,573 @@ const fresh = (name: string) => `/blog/daily-demand-sensing-store-replenishment/
 const audit = (name: string) => `/blog/freight-bill-auditing-india/${name}.jpg`;
 const sop = (name: string) => `/blog/continuous-sop-consumer-electronics/${name}.jpg`;
 
+const po = (name: string) => `/blog/dc-network-transition-open-pos/${name}.jpg`;
+const hil = (name: string) => `/blog/human-in-the-loop-ai-supply-chain/${name}.jpg`;
+const season = (name: string) => `/blog/seasonal-demand-freight-planning-diagnostics/${name}.jpg`;
+const medtech = (name: string) => `/blog/medtech-supply-chain-exceptions/${name}.jpg`;
+const launch = (name: string) => `/blog/instrument-launch-logistics/${name}.jpg`;
+
 export const articles: Article[] = [
+  {
+    slug: "dc-network-transition-open-pos",
+    solutions: ["execution"],
+    title: "The Hidden PO Cost of a DC Network Transition",
+    seoTitle: "DC Network Transition: The Hidden Cost of Open POs",
+    description:
+      "Discover how a DC network transition affects open POs, creates hidden costs and how agentic AI helps manage changes across suppliers and systems.",
+    dek: "Discover how a DC network transition affects open POs, creates hidden costs and how agentic AI helps manage changes across suppliers and systems.",
+    readMins: 6,
+    cover: {
+      src: po("cover"),
+      alt: "Shipping carton label still addressed to a closed distribution centre, covered by a facility-closed redirect sticker, showing an open PO that missed the DC network transition.",
+      width: 2400,
+      height: 1350,
+    },
+    body: [
+      { type: "p", text: "A new distribution centre is operational. But some purchase orders still point to the old one." },
+      { type: "p", text: "During a **DC network transition**, companies may close existing facilities, open new ones or shift operations to third-party logistics (3PL) providers. Yet a **3PL transition** does not automatically update open purchase orders, supplier confirmations or inbound shipment instructions." },
+      { type: "p", text: "These gaps can lead to manual corrections, shipment delays and additional freight costs. While the physical network changes, purchase order execution may struggle to keep pace." },
+      { type: "p", text: "The result? A distribution transition that continues to generate costs even after the new facility goes live." },
+
+      { type: "h2", text: "Where PO execution breaks during a DC network transition" },
+      { type: "p", text: "A **DC network transition** changes where goods are received and distributed. But existing purchase orders (POs) and supplier instructions may still reflect the previous network. This creates four common challenges:" },
+      {
+        type: "list",
+        items: [
+          "**Outdated delivery addresses:** Open POs may still reference closed or relocated DCs, increasing the risk of misdirected shipments.",
+          "**ASN discrepancies:** Advance shipping notices (ASNs) may contain outdated destinations or fail to match revised PO details, causing receiving delays.",
+          "**Outdated allocation rules:** Inventory may continue to be assigned to old locations, even when distribution responsibilities have changed.",
+          "**Supplier confirmation gaps:** Suppliers may not have acknowledged PO amendments, leaving uncertainty about where and when goods will arrive.",
+        ],
+      },
+      { type: "p", text: "These issues can become harder to manage during a phased DC or **3PL transition**. Old and new facilities may operate in parallel, while the new 3PL is still ramping up." },
+      { type: "p", text: "As a result, procurement, logistics and warehouse teams must coordinate PO changes across multiple systems and partners to keep inbound deliveries on track." },
+
+      { type: "h2", text: "The hidden cost of a PO that follows the wrong network" },
+      { type: "p", text: "An outdated purchase order can create costs beyond a simple correction. During a DC network transition, a mismatch between PO details and the new distribution network can affect suppliers, shipments and warehouse operations." },
+      { type: "p", text: "These costs can appear in several ways:" },
+      {
+        type: "list",
+        items: [
+          "**Manual PO corrections:** Procurement teams spend time identifying affected orders and updating delivery instructions.",
+          "**Supplier follow-ups:** Teams must confirm whether suppliers have received and accepted revised PO details.",
+          "**Additional freight and handling costs:** Shipments sent to the wrong DC may need redirection, extra transport or repeated handling.",
+          "**Receiving delays:** Missing or mismatched shipment information can delay goods receipt at the new facility.",
+          "**Inventory availability issues:** Delayed receipts can affect stock availability and downstream deliveries.",
+        ],
+      },
+      { type: "p", text: "One unresolved PO can involve procurement, logistics, warehouse operations and finance. Each team may need to investigate, coordinate changes or reconcile additional charges." },
+      { type: "p", text: "**The hidden cost is not just correcting the PO. It is the time, effort and expense of coordinating and verifying every change that follows.**" },
+
+      { type: "h2", text: "Which POs should move, stay or bypass the DC?" },
+      { type: "p", text: "During a phased DC network transition, old and new facilities may operate in parallel. Some purchase orders may need new delivery destinations, while others can continue through the existing network." },
+      { type: "p", text: "The right decision depends on the PO status, supplier confirmation, shipment progress, receiving capacity and delivery commitments." },
+      {
+        type: "table",
+        head: ["PO condition", "Decision to evaluate"],
+        rows: [
+          ["Goods not yet dispatched", "Update the PO to an approved receiving DC, if required."],
+          ["Supplier has not confirmed the PO amendment", "Obtain confirmation before treating the change as accepted."],
+          ["Shipment already in transit", "Check whether redirection is feasible and cost-effective."],
+          ["New 3PL has limited receiving capacity", "Consider another approved facility or reschedule delivery."],
+          ["Shipment is eligible for DC bypass", "Compare direct delivery with the DC route based on cost and service requirements."],
+        ],
+      },
+      { type: "p", text: "Not every PO needs to be redirected. Some shipments may continue to the existing DC, while others require revised instructions or alternative routes." },
+      { type: "p", text: "**DC bypass is an option only where operationally feasible and commercially justified.** The objective is to make the right decision for each PO without disrupting deliveries or creating unnecessary costs." },
+      { type: "viz", name: "po-routing" },
+
+      { type: "h2", text: "How a PO agent keeps purchase orders aligned during a network transition" },
+      { type: "p", text: "During a **DC network transition**, managing open POs requires more than updating delivery addresses. Teams must check supplier confirmations, shipment status and receiving capacity before making changes." },
+      { type: "p", text: "An agentic AI-powered PO agent can help coordinate this process through five steps:" },
+      {
+        type: "list",
+        items: [
+          "**Monitor:** Track open POs, supplier confirmations and advance shipping notices (ASNs) across connected systems.",
+          "**Identify:** Find orders that require destination changes, lack supplier confirmation or contain mismatched shipment details.",
+          "**Evaluate:** Check shipment status, approved delivery locations, receiving capacity and business rules to determine the appropriate action.",
+          "**Act:** Update permitted PO details, coordinate changes with relevant parties or route decisions for human approval.",
+          "**Verify:** Confirm that authorised changes are reflected in relevant systems and maintain an audit trail.",
+        ],
+      },
+      { type: "p", text: "Not every PO requires the same action or level of automation. Business rules define permitted changes, while approval thresholds and escalation procedures keep sensitive decisions with the right people." },
+      { type: "p", text: "**The goal is not simply to identify PO discrepancies, but to ensure that the required changes are authorised, executed and verified.**" },
+      { type: "figure", src: po("po-agent-update"), alt: "Laptop showing a PO agent updating a purchase order from the old DC to a new 3PL DC, with supplier confirmation, ASN match and receiving slot verified.", width: 2400, height: 1350 },
+
+      { type: "h2", text: "How Agentra supports PO execution across existing systems" },
+      { type: "p", text: "During a **DC network transition**, purchase order changes often involve multiple systems, suppliers and logistics partners. Keeping them aligned requires more than updating information in one application." },
+      { type: "h3", text: "Connecting existing enterprise systems" },
+      { type: "p", text: "Agentra works with existing ERP, supplier and logistics applications through 1,100+ connectors. This helps agents access relevant PO, supplier and shipment information without requiring companies to replace their existing systems." },
+      { type: "h3", text: "Coordinating authorised PO changes" },
+      { type: "p", text: "Agentra's specialised AI agents can identify affected orders, evaluate approved destinations and coordinate permitted changes across connected systems. This supports PO execution as companies move to new DCs or adopt a hybrid 3PL model." },
+      {
+        type: "proof",
+        items: [
+          {
+            client: "PO execution across systems",
+            text: "In one implementation, Agentra enabled the booking of **3,000+ POs per month** from SAP to a freight forwarder without manual re-keying.",
+            stats: [{ value: "3,000+", label: "POs per month booked from SAP" }],
+          },
+        ],
+      },
+      { type: "p", text: "This demonstrates Agentra's experience in automating PO-related workflows between systems, a capability relevant to managing PO changes during network transitions." },
+      { type: "h3", text: "Keeping people in command" },
+      { type: "p", text: "Suggest, Co-pilot and Autopilot modes allow organisations to define the level of agent autonomy. Business rules, approval workflows and audit trails help keep changes controlled and traceable." },
+
+      { type: "h2", text: "Conclusion: A DC transition is not complete until the POs catch up" },
+      { type: "p", text: "A new distribution centre may be ready, but the transition is far from complete if purchase orders still follow the old network. Every delayed update, missed confirmation or misdirected shipment can add cost and disrupt deliveries." },
+      { type: "p", text: "The real measure of a successful **DC network transition** is not just moving operations to a new facility. It is keeping purchase orders, suppliers and inbound shipments aligned as the network changes." },
+      { type: "p", text: "**With Agentra, your supply chain acts on what it knows. You stay in command.**" },
+      { type: "cta", text: "**[Book a 30-minute walkthrough to see Agentra's PO agents in action.](/contact)**" },
+    ],
+  },
+  {
+    slug: "human-in-the-loop-ai-supply-chain",
+    solutions: ["orchestration"],
+    title: "Human-in-the-Loop AI in Supply Chains: How Much Human Oversight Is Enough?",
+    seoTitle: "Human-in-the-Loop AI in Supply Chains",
+    description:
+      "When does human intervention protect supply chain performance, and when does it become an operational constraint?",
+    dek: "When does human intervention protect supply chain performance, and when does it become an operational constraint?",
+    readMins: 7,
+    cover: {
+      src: hil("cover"),
+      alt: "A desk covered in rubber-stamped routine approval requests, with one unreviewed priority request for a supplier substitution with quality impact buried among them.",
+      width: 2400,
+      height: 1350,
+    },
+    body: [
+      { type: "p", text: "As AI agents move beyond recommendations to executing supply chain decisions, the role of human oversight is changing." },
+      { type: "p", text: "According to [Capgemini Research Institute's November 2026 report](https://www.capgemini.com/gb-en/insights/research-library/reinventing-supply-chains/), only 25% of organisations expect fully automated supply chains within three to five years, down from 37% in 2025. Meanwhile, 84% believe humans must retain the authority to validate AI-generated decisions." },
+      { type: "p", text: "But retaining human authority does not necessarily mean approving every decision." },
+      { type: "p", text: "This raises a fundamental question about human-in-the-loop AI in supply chains: which decisions should agents execute independently, which require human approval and which should remain human-led?" },
+
+      { type: "h2", text: "Why approving every AI decision is not scalable" },
+      { type: "p", text: "Agentic AI can accelerate supply chain decisions. However, if every action requires human approval, faster analysis may not translate into faster execution." },
+      { type: "p", text: "According to G2's 2026 AI Agents Insight Report, 45% of surveyed buyers report that supervision and rework consume more than a quarter of their anticipated productivity benefits." },
+      { type: "h3", text: "Human approval can delay time-critical decisions" },
+      { type: "p", text: "An agent may identify an alternative freight booking to prevent a production delay. However, while the decision awaits approval, the available freight capacity may be taken." },
+      { type: "p", text: "In such cases, the approval process itself becomes an operational risk." },
+      { type: "h3", text: "Excessive approvals can weaken human oversight" },
+      { type: "p", text: "Reviewing every routine transaction increases the employee workload and leaves less attention for critical exceptions." },
+      { type: "p", text: "A routine purchase order update and a supplier substitution affecting product quality should not receive the same level of scrutiny." },
+      { type: "p", text: "Effective human oversight means focusing human judgement on decisions where it adds the most value." },
+      { type: "p", text: "**The challenge is to preserve human control without slowing down execution unnecessarily.**" },
+
+      { type: "h2", text: "What happens when agents have too much autonomy?" },
+      { type: "p", text: "[Unrestricted agent autonomy](https://genai.owasp.org/llmrisk/llm062025-excessive-agency/) can turn an isolated decision error into a wider operational disruption. The risk lies not only in incorrect decisions, but also in executing decisions without sufficient business context or authority." },
+      {
+        type: "table",
+        head: ["Risk", "Supply chain scenario", "Business consequence"],
+        rows: [
+          ["Conflicting objectives", "An agent selects a cheaper freight option without considering production deadlines.", "Freight savings are outweighed by production downtime."],
+          ["Unauthorised execution", "An agent places an order with an unqualified supplier to resolve a material shortage.", "Quality and regulatory risks."],
+          ["Cascading errors", "An incorrect demand assessment triggers changes to purchase orders, freight bookings and replenishment plans.", "Excess inventory, unnecessary expenditure and operational disruption."],
+          ["Cumulative financial exposure", "Multiple transactions remain within individual spending limits but collectively exceed the available budget.", "Unplanned expenditure despite transaction-level compliance."],
+        ],
+      },
+      { type: "p", text: "Illustrative scenarios of risks associated with insufficiently governed agent autonomy." },
+      { type: "p", text: "These risks highlight an important distinction: an agent's ability to execute a decision does not establish its authority to do so." },
+      { type: "p", text: "**While excessive approvals can delay the right decision, unrestricted autonomy can accelerate the wrong one.**" },
+
+      { type: "h2", text: "Which supply chain decisions require human approval?" },
+      { type: "p", text: "Not every supply chain decision warrants the same level of human involvement. Updating a shipment status and approving a new supplier carry different financial, operational and regulatory consequences." },
+      { type: "p", text: "Drawing on the risk-based governance principles of the [NIST AI Risk Management Framework](https://nvlpubs.nist.gov/nistpubs/AI/NIST.AI.100-1.pdf), organisations can allocate decision-making authority between humans and agents based on the potential consequences of each action." },
+      { type: "h3", text: "A risk-based decision-rights framework" },
+      {
+        type: "table",
+        head: ["Supply chain function", "Autonomous execution", "Human approval required", "Human-led decisions"],
+        rows: [
+          ["Procurement", "Routine PO updates", "Significant quantity or price changes", "New supplier approval"],
+          ["Logistics", "Freight booking within approved limits", "Exceptional freight expenditure", "Strategic logistics partner selection"],
+          ["Inventory", "Routine replenishment", "Stock reallocation affecting priority customers", "Major inventory investments"],
+          ["Production", "Routine scheduling adjustments", "Changes affecting delivery commitments", "Production capacity expansion"],
+          ["Quality management", "Detection and reporting of quality deviations", "Corrective actions requiring approval", "Release of regulated, quality-held products"],
+        ],
+      },
+      { type: "p", text: "Illustrative application of risk-based AI governance principles to supply chain operations." },
+      { type: "h3", text: "Why agent autonomy should be context-dependent" },
+      { type: "p", text: "Assigning a fixed level of autonomy to a task assumes that its associated risks remain constant. In supply chains, they rarely do." },
+      { type: "p", text: "Consider freight booking:" },
+      {
+        type: "list",
+        items: [
+          "**Routine booking:** An approved carrier and contracted rate allow autonomous execution within authorised limits.",
+          "**Financial exception:** Costs exceeding authorised limits require human approval.",
+          "**Compliance exception:** An unqualified carrier for a regulated shipment requires the action to be blocked and escalated.",
+        ],
+      },
+      { type: "p", text: "The task remains the same, but the associated risk changes." },
+      { type: "p", text: "Financial exposure, operational impact, regulatory requirements, reversibility, data reliability and time sensitivity should therefore inform the level of autonomy granted." },
+      { type: "p", text: "**Human oversight should reflect the circumstances in which an agent acts, not merely the task it performs.**" },
+      { type: "viz", name: "autonomy-context" },
+
+      { type: "h2", text: "How to define the boundaries of agent autonomy" },
+      { type: "p", text: "Once decision rights are established, organisations must translate them into enforceable operational controls." },
+      { type: "p", text: "Five mechanisms can help supply chain leaders define these boundaries:" },
+      {
+        type: "list",
+        items: [
+          "**Financial thresholds:** Set spending and transaction limits beyond which human approval is required.",
+          "**Risk-based guardrails:** Define permissible actions based on operational, quality and regulatory requirements.",
+          "**System permissions:** Restrict which systems, records and transactions agents can access or modify.",
+          "**Escalation rules:** Specify when agents must stop, seek approval and involve the appropriate decision-maker.",
+          "**Audit trails:** Maintain a traceable record of recommendations, approvals, decisions and executed actions.",
+        ],
+      },
+      { type: "p", text: "These controls should evolve as business conditions, operational risks and agent performance change." },
+      { type: "p", text: "The objective is to enable autonomous execution without compromising human authority or organisational accountability." },
+      { type: "figure", src: hil("autonomy-boundaries"), alt: "An agent action passing through financial thresholds, risk-based guardrails, system permissions and escalation rules, with one action routed to a human approver and every step recorded in an audit trail.", width: 2400, height: 1350 },
+
+      { type: "h2", text: "How Agentra balances autonomy with human control" },
+      { type: "p", text: "Agentra enables organisations to define the level of autonomy granted to agents based on business requirements, decision rights and risk tolerance." },
+      { type: "p", text: "Its three operating modes support different levels of human involvement:" },
+      {
+        type: "table",
+        head: ["Operating mode", "Agent's role", "Human's role"],
+        rows: [
+          ["Suggest", "Analyses situations and recommends actions.", "Evaluates recommendations, decides and initiates action."],
+          ["Co-pilot", "Recommends actions and executes them after approval.", "Reviews and authorises execution."],
+          ["Autopilot", "Makes and executes decisions within predefined guardrails.", "Defines boundaries, monitors performance and intervenes when required."],
+        ],
+      },
+      { type: "p", text: "Across these modes, configurable guardrails, approval workflows, escalation rules and audit trails support human oversight and operational accountability." },
+      { type: "p", text: "The objective is not maximum autonomy, but the right level of autonomy for each decision." },
+      { type: "p", text: "**Agents that act. People in command.**" },
+
+      { type: "h2", text: "How to measure effective human-agent collaboration" },
+      { type: "p", text: "Effective human-agent collaboration should deliver both operational efficiency and responsible execution. Supply chain leaders can assess this balance through four key metrics." },
+      {
+        type: "table",
+        head: ["Metric", "What it measures"],
+        rows: [
+          ["Approval time", "Time between an agent requesting approval and receiving a human decision."],
+          ["Manual intervention rate", "Percentage of agent-handled activities requiring human intervention."],
+          ["Policy compliance rate", "Percentage of executed actions that comply with defined business rules, permissions and guardrails."],
+          ["Decision-to-action time", "Time between an authorised decision and its execution."],
+        ],
+      },
+      { type: "p", text: "These metrics should be evaluated together. A lower manual intervention rate is not necessarily an improvement if policy violations increase. Similarly, high policy compliance should not come at the expense of avoidable operational delays." },
+
+      { type: "h2", text: "Conclusion" },
+      { type: "p", text: "Effective human oversight is not about approving every decision or granting agents unrestricted autonomy. It is about ensuring that the right decisions receive the right level of human involvement." },
+      { type: "p", text: "For supply chain leaders, the objective is clear: faster execution, governed autonomy and human accountability." },
+      { type: "p", text: "**Agents that act. People in command.**" },
+    ],
+  },
+  {
+    slug: "seasonal-demand-freight-planning-diagnostics",
+    solutions: ["planning", "execution"],
+    title: "When Seasonal Demand Drops: Re-planning Freight in a Season, Not a Year",
+    seoTitle: "Seasonal Demand Freight Planning in Diagnostics Supply Chains",
+    description:
+      "Learn how seasonal demand freight planning helps diagnostics supply chain teams adjust capacity, reduce excess freight costs and respond to demand shifts.",
+    dek: "Learn how seasonal demand freight planning helps diagnostics supply chain teams adjust capacity, reduce excess freight costs and respond to demand shifts.",
+    readMins: 6,
+    cover: {
+      src: season("cover"),
+      alt: "Refrigerated trailer at a loading dock, only partly filled with cold-chain shippers, showing unused freight capacity after demand fell.",
+      width: 2400,
+      height: 1350,
+    },
+    body: [
+      { type: "p", text: "The winter respiratory season is slowing down. The freight commitments aren't." },
+      { type: "p", text: "Diagnostics manufacturers often reserve trucks, container capacity and air freight months in advance, anticipating seasonal demand for respiratory tests. But when orders fall below forecasts, committed freight capacity may exceed actual requirements." },
+      { type: "p", text: "This creates a difficult decision: should manufacturers retain capacity in case demand recovers or release it before cancellation deadlines to avoid unnecessary costs?" },
+      { type: "p", text: "For the diagnostics supply chain, **seasonal demand freight planning** is therefore more than a forecasting exercise. It is about balancing freight costs with the ability to respond if demand returns." },
+      { type: "p", text: "The question is not simply how quickly freight plans can change, but whether manufacturers can act before the opportunity to change them closes." },
+
+      { type: "h2", text: "Why seasonal demand freight planning is challenging" },
+      { type: "p", text: "Seasonal demand rarely follows forecasts exactly. When actual orders fall below expectations, manufacturers may need less transportation capacity than originally planned. However, adjusting freight arrangements is not always straightforward." },
+      { type: "p", text: "Three challenges make **seasonal demand freight planning** difficult:" },
+      {
+        type: "list",
+        items: [
+          "**Excess transportation capacity:** Trucks, containers or air freight space arranged against higher volumes may remain underutilised.",
+          "**Shipment schedule adjustments:** Lower volumes may require manufacturers to consolidate loads, postpone dispatches or revise delivery schedules, while still meeting customer commitments.",
+          "**Existing freight commitments:** Carrier contracts, cancellation deadlines and minimum-volume agreements can limit flexibility. Changing bookings may also introduce additional costs.",
+        ],
+      },
+      { type: "p", text: "The difficulty is not simply identifying lower demand. It is determining how much committed capacity to retain, how much to release and when that decision must be made." },
+      { type: "p", text: "Releasing capacity too early may leave manufacturers exposed if respiratory demand recovers." },
+      { type: "p", text: "Holding it for too long may result in unnecessary freight costs. Cancellation deadlines make this a time-sensitive commercial decision rather than a routine planning adjustment." },
+
+      { type: "h2", text: "What falling demand means for the diagnostics supply chain" },
+      { type: "p", text: "A decline in respiratory test demand does not necessarily mean that all freight requirements fall at the same rate. Manufacturers must assess which shipments can be adjusted without disrupting other product flows." },
+      {
+        type: "list",
+        items: [
+          "**Respiratory test kits and consumables:** Lower orders may reduce shipment volumes, creating opportunities to consolidate loads or release surplus capacity.",
+          "**Reagents:** Shelf-life and temperature-control requirements may limit opportunities to postpone shipments.",
+          "**Diagnostic instruments:** Scheduled deliveries, specialised transport and installation commitments may still require dedicated freight capacity.",
+        ],
+      },
+      { type: "p", text: "Understanding these differences helps manufacturers determine which freight commitments can be released and which need to be retained." },
+
+      { type: "h2", text: "Why traditional freight replanning struggles to keep pace" },
+      { type: "p", text: "A change in demand does not automatically update freight plans. Forecasts, inventory, production schedules and freight bookings often sit in separate systems." },
+      { type: "p", text: "This creates three challenges:" },
+      {
+        type: "list",
+        items: [
+          "**Disconnected data:** Updated demand forecasts may not be linked to committed freight capacity.",
+          "**Manual coordination:** Teams must check bookings, contractual obligations, cancellation deadlines and revised shipment requirements.",
+          "**Delayed decisions:** Cancellation windows may close before teams determine whether capacity should be retained or released.",
+        ],
+      },
+      { type: "p", text: "For the **diagnostics supply chain**, these delays can increase costs and limit flexibility." },
+      { type: "p", text: "The challenge is not a lack of information, but the time it takes to turn that information into action." },
+      { type: "figure", src: season("replanning-timeline"), alt: "Timeline showing manual freight replanning missing two carrier cancellation deadlines after a drop in demand, while agent-assisted replanning catches all of them.", width: 2400, height: 1350 },
+
+      { type: "h2", text: "How agentic AI supports timely hold-or-release decisions" },
+      { type: "p", text: "Agentic AI connects changing demand with committed freight capacity, helping manufacturers evaluate their options before cancellation deadlines." },
+      { type: "p", text: "The process involves five steps:" },
+      {
+        type: "list",
+        items: [
+          "**Detect demand changes:** Demand sensing agents monitor orders, sales trends and forecasts to identify changes in respiratory test demand.",
+          "**Identify affected commitments:** Agents compare revised freight requirements with existing bookings, minimum-volume agreements and cancellation deadlines.",
+          "**Evaluate alternatives:** Agents assess the cost of holding surplus capacity against the savings and service risks of releasing it. They also evaluate consolidation and reassignment opportunities.",
+          "**Recommend a response:** An orchestrator brings the findings together and recommends how much capacity to retain or release, considering financial and operational implications.",
+          "**Execute approved changes:** Authorised agents can update bookings through connected systems, subject to contractual conditions, permissions and required approvals.",
+        ],
+      },
+      { type: "p", text: "The value lies in helping manufacturers make informed freight decisions before cancellation windows close." },
+      { type: "figure", src: season("freight-planning-board"), alt: "Freight planning board with agent-recommended bookings sorted into keep, consolidate, re-mode, postpone and cancel, approved by the logistics lead.", width: 2400, height: 1350 },
+
+      { type: "h2", text: "Measuring the value of demand-responsive freight planning" },
+      { type: "p", text: "Faster freight replanning is useful only if it improves cost, capacity utilisation and decision-making. Manufacturers can track four metrics to measure its impact:" },
+      {
+        type: "list",
+        items: [
+          "**Time to replan:** Time taken to revise freight requirements after a demand change.",
+          "**Avoidable freight costs:** Savings from reducing unused capacity, unnecessary bookings and preventable charges.",
+          "**Capacity utilisation:** Percentage of available freight capacity actually used.",
+          "**Decision-to-action time:** Time between selecting a freight adjustment and implementing it.",
+        ],
+      },
+      { type: "p", text: "Comparing these metrics before and after introducing agent-assisted replanning helps manufacturers assess whether faster decisions translate into measurable operational and financial benefits." },
+
+      { type: "h2", text: "How Agentra supports more responsive freight decisions" },
+      { type: "p", text: "When demand changes, knowing which freight bookings to adjust is only half the challenge. Teams also need to understand the cost, risks and consequences of each option." },
+      { type: "p", text: "Agentra helps connect these decisions with action." },
+      {
+        type: "list",
+        items: [
+          "**Connect existing systems:** With 1,100+ connectors, Agentra brings together relevant data from ERP, planning and logistics systems without replacing them.",
+          "**Build shared context:** Its AI ontology links demand, inventory, orders and shipments to help identify affected freight commitments.",
+          "**Evaluate alternatives:** Specialised AI agents can assess options such as consolidation, postponement or cancellation, considering cost and delivery impact.",
+          "**Coordinate decisions:** An orchestrator brings agent findings together into an explained recommendation.",
+          "**Act with control:** Governed workflows support approvals, authorised updates and audit trails, keeping people in command.",
+        ],
+      },
+      { type: "p", text: "The value is not another forecast or alert. It is helping manufacturers turn changing demand into informed freight decisions while there is still time to act." },
+
+      { type: "h2", text: "When demand changes, freight commitments must follow" },
+      { type: "p", text: "A slower respiratory season should not automatically translate into higher costs from unused freight capacity. The key is knowing what to retain, what to release and acting before cancellation deadlines." },
+      { type: "p", text: "Agentra connects changing demand with freight decisions and governed execution, helping manufacturers balance cost efficiency with service continuity." },
+      { type: "p", text: "**The forecast may change. Your ability to act shouldn't.**" },
+    ],
+  },
+  {
+    slug: "medtech-supply-chain-exceptions",
+    solutions: ["resilience", "orchestration"],
+    title: "Why Medtech Exceptions Take Days, and How Agents Take Them to Minutes",
+    seoTitle: "Why Medtech Supply Chain Decisions Take Days—and How AI Agents Help",
+    description:
+      "Learn how AI agents reduce decision latency, accelerate medtech supply chain exception response and enable faster action without compromising compliance.",
+    dek: "Learn how AI agents reduce decision latency, accelerate medtech supply chain exception response and enable faster action without compromising compliance.",
+    readMins: 6,
+    cover: {
+      src: medtech("cover"),
+      alt: "An hourglass filled with sterile-packed medical components running low, with a plaque reading Line 3 sterile component stock.",
+      width: 2400,
+      height: 1350,
+    },
+    body: [
+      { type: "p", text: "A delayed component can affect more than a delivery date." },
+      { type: "p", text: "For a medtech manufacturer, it may disrupt production schedules, increase freight costs or delay the availability of critical medical devices. The longer medtech supply chain exceptions remain unresolved, the fewer options teams may have to limit their impact." },
+      { type: "p", text: "Yet the response often depends on information scattered across procurement, logistics, planning and quality teams. This can increase decision latency: the time it takes to assess an exception, evaluate alternatives and reach an authorised decision." },
+      { type: "p", text: "The challenge is reducing this latency before operational disruptions escalate." },
+
+      { type: "h2", text: "Where Decision Latency Builds up in Medtech Supply Chains" },
+      { type: "p", text: "Detecting an exception does not mean teams have enough information to act. They must establish what is affected, evaluate available options and determine who can authorise the response. Three bottlenecks often slow this process." },
+      { type: "figure", src: medtech("decision-latency-chokepoints"), alt: "Pipe cutaway showing an alert passing through three choke points: fragmented information, hand-offs and quality checks, taking 73 hours to reach a decision.", width: 2400, height: 1350 },
+      { type: "h3", text: "Fragmented operational information" },
+      { type: "p", text: "Shipment status, inventory availability, supplier commitments and production schedules often sit in separate systems. A delayed component may be visible in one system, but its impact on production orders may not be." },
+      { type: "p", text: "Teams must reconcile this information before assessing the urgency and deciding on corrective action." },
+      { type: "h3", text: "Cross-functional hand-offs" },
+      { type: "p", text: "Resolving an exception may involve logistics, procurement, planning and quality teams. Each brings part of the information needed for a decision." },
+      { type: "p", text: "When updates move through emails, spreadsheets and manual ERP entries, teams spend time waiting for information, clarifying responsibilities and confirming the next step." },
+      { type: "h3", text: "Quality and regulatory dependencies" },
+      { type: "p", text: "Medtech decisions may require verification of approved suppliers, component specifications, material traceability and quality documentation." },
+      { type: "p", text: "These safeguards cannot be bypassed. However, scattered records, unclear approval ownership and manual documentation can extend the time needed to reach an authorised decision." },
+      { type: "p", text: "**The challenge is not simply seeing an exception sooner. It is bringing the right information, decisions and approvals together before the delay affects operations.**" },
+
+      { type: "h2", text: "The Hidden Cost of Delayed Decisions" },
+      { type: "p", text: "A delayed component does not necessarily stop production. A delayed decision, however, can make the disruption harder and more expensive to manage." },
+      { type: "p", text: "Consider a medtech manufacturer awaiting a critical component for diagnostic equipment. Existing inventory may keep production running temporarily. But as teams assess alternatives, the window to secure additional supplies or adjust production schedules continues to narrow." },
+      { type: "p", text: "The consequences can extend across operations:" },
+      {
+        type: "list",
+        items: [
+          "**Production disruption:** Delayed decisions may force last-minute schedule changes or production stoppages.",
+          "**Higher costs:** Emergency sourcing, premium freight and expedited orders can increase operating expenses.",
+          "**Delivery risks:** Production delays can affect customer commitments and the availability of finished medical devices.",
+        ],
+      },
+      { type: "p", text: "Unlike many manufacturing environments, medtech alternatives may also require supplier qualification, material verification and quality approval. These requirements make timely assessment and early escalation essential." },
+      { type: "p", text: "**The longer a decision takes, the fewer options may remain to protect production, control costs and meet delivery commitments.**" },
+
+      { type: "h2", text: "How AI Agents Shorten Exception Response from Days to Minutes" },
+      { type: "p", text: "What if the information needed to resolve an exception could be assembled, assessed and acted upon without repeated manual hand-offs?" },
+      { type: "p", text: "AI agents can connect data, decisions and workflows across systems, reducing the time between identifying a problem and initiating corrective action." },
+      { type: "p", text: "Consider the delayed component used in diagnostic equipment." },
+      {
+        type: "list",
+        items: [
+          "**Detect:** Identify the supplier delay through connected systems or incoming shipment updates.",
+          "**Assess:** Link the delayed component to available inventory, affected production orders and delivery commitments.",
+          "**Evaluate:** Compare approved alternatives against cost, lead-time and quality requirements.",
+          "**Escalate:** Present recommended actions and route decisions requiring human approval.",
+          "**Execute:** Initiate authorised actions, update connected systems and maintain an audit trail.",
+        ],
+      },
+      { type: "p", text: "Instead of spending hours gathering information and passing updates between teams, planners can focus on decisions that require their judgement." },
+      { type: "figure", src: medtech("manual-vs-orchestrated"), alt: "Manual coordination shown as a cork board of tangled red string between four teams, next to agent-assisted orchestration as one flow with a single human approval.", width: 2400, height: 1350 },
+
+      { type: "h2", text: "Faster Action, with Quality and Compliance Built in" },
+      { type: "p", text: "In medtech, faster decisions cannot come at the expense of product quality, patient safety or regulatory compliance. Supplier changes, material substitutions and production adjustments may require verification and approval before action can be taken." },
+      { type: "p", text: "Agent-assisted orchestration must therefore operate within clearly defined controls:" },
+      {
+        type: "list",
+        items: [
+          "**Approved suppliers and materials:** Agents evaluate alternatives against supplier qualifications, approved components and material specifications.",
+          "**Human oversight:** Quality-sensitive decisions are routed to authorised personnel for review and approval.",
+          "**Permissions and escalation:** Defined rules determine which actions agents can execute, which require approval and when exceptions must be escalated.",
+          "**Traceability:** Recommendations, approvals and actions are recorded to support accountability and audit requirements.",
+        ],
+      },
+      { type: "p", text: "Agentra enables this governed orchestration through three operating modes:" },
+      {
+        type: "list",
+        items: [
+          "**Suggest:** Agents recommend actions for human review.",
+          "**Co-pilot:** Agents assist with workflows while keeping people involved in key decisions.",
+          "**Autopilot:** Agents execute authorised actions within predefined guardrails.",
+        ],
+      },
+      { type: "p", text: "Together, these modes, approval workflows and audit trails help organisations introduce automation while maintaining control over critical decisions." },
+      { type: "p", text: "**The goal is not to bypass quality and compliance requirements, but to orchestrate the work around them so that decisions and corrective actions can move faster.**" },
+
+      { type: "h2", text: "Measure the Time from Exception Detection to Action" },
+      { type: "p", text: "A faster response is only meaningful if organisations can identify where time has been saved. Measuring total exception-response time alone may hide delays in investigation, decision-making and execution." },
+      { type: "p", text: "For medtech manufacturers, four metrics can provide a clearer picture:" },
+      {
+        type: "list",
+        items: [
+          "**Time to assess impact:** Measure the time between detecting an exception and identifying affected inventory, production orders and delivery commitments.",
+          "**Decision latency:** Track how long it takes to evaluate the available options, obtain required approvals and reach an authorised decision.",
+          "**Time to action:** Measure the interval between approval and the initiation of corrective action.",
+          "**Manual hand-offs:** Track the percentage of exceptions handled without unnecessary transfers between teams.",
+        ],
+      },
+      { type: "p", text: "Comparing these metrics before and after introducing agent-assisted orchestration helps identify where automation reduces delays and where further process improvements are needed." },
+      { type: "p", text: "**The goal is not simply faster exception detection, but measurable reductions in the time it takes to assess, decide and act.**" },
+
+      { type: "h2", text: "Conclusion: Make Exception Response as Fast as Exception Detection" },
+      { type: "p", text: "Not every medtech supply chain exception can be prevented. But the delays between identifying a problem, deciding on a response and taking action can be reduced." },
+      { type: "p", text: "Agentra connects existing systems and orchestrates exception-response workflows, helping teams assess impacts, evaluate alternatives and initiate authorised actions. Defined guardrails, approval workflows and audit trails keep critical decisions under human oversight." },
+      { type: "p", text: "**Detecting an exception early creates an opportunity. Reducing decision latency helps organisations act on it before that opportunity is lost.**" },
+      { type: "cta", text: "**[Book a 30-minute walkthrough](/contact)** to explore how Agentra can help your team respond to supply chain exceptions faster." },
+    ],
+  },
+  {
+    slug: "instrument-launch-logistics",
+    solutions: ["orchestration", "execution"],
+    title: "Instrument Launches Are a Logistics Problem",
+    seoTitle: "Product Launch Logistics: Agentic AI for Instrument Launches",
+    description:
+      "Explore how agentic AI simplifies product launch logistics by coordinating instrument deliveries, cartridge availability and installation schedules.",
+    dek: "Explore how agentic AI simplifies product launch logistics by coordinating instrument deliveries, cartridge availability and installation schedules.",
+    readMins: 7,
+    cover: {
+      src: launch("cover"),
+      alt: "Crated diagnostic instrument delivered on time to a lab, with a field service ticket for Tuesday's installation and a note that cartridges will not arrive until Thursday.",
+      width: 2400,
+      height: 1350,
+    },
+    body: [
+      { type: "p", text: "The diagnostic instrument arrives on time. The cartridges are still in transit. The installation engineer is booked for the wrong day. Each activity may have been planned independently, but a successful instrument launch depends on how well they are coordinated." },
+      { type: "p", text: "Unlike routine consumables distribution, diagnostic **instrument launches** introduce specialised freight requirements, new order patterns and dependencies between product deliveries and installation schedules." },
+      { type: "p", text: "Managing these activities across disconnected systems and logistics partners makes coordination more complex." },
+      { type: "p", text: "The challenge is not simply moving instruments from one location to another. It is ensuring that orders, shipments and installation schedules remain aligned, even when operational conditions change." },
+
+      { type: "h2", text: "Why instrument launches are harder than routine logistics operations" },
+      { type: "p", text: "Routine consumables distribution follows relatively established order patterns, freight arrangements and delivery schedules. **Product launch logistics** introduces additional requirements alongside these existing operations." },
+      { type: "p", text: "For diagnostics manufacturers, instrument logistics presents four key challenges." },
+      { type: "h3", text: "Heavy-goods transportation" },
+      { type: "p", text: "Larger diagnostic instruments may require specialised vehicles, loading equipment and carriers. Existing freight arrangements may not accommodate their size, weight or delivery requirements." },
+      { type: "h3", text: "Specialised handling requirements" },
+      { type: "p", text: "Diagnostic instruments are often sensitive, high-value equipment. They may require protective packaging, careful handling and specific transportation conditions to minimise the risk of damage in transit." },
+      { type: "h3", text: "Coordination with installation schedules" },
+      { type: "p", text: "Instrument deliveries depend on engineer availability, site readiness and the availability of cartridges required for commissioning." },
+      { type: "p", text: "[Kuehne+Nagel's](https://assets.kuehne-nagel.com/f/331466/x/be9035007f/industry-solutions-healthcare-medical-devices-and-med-tech-whitepaper.pdf) whitepaper, Resilient by Design: Logistics for Medical Capital Equipment, highlights the importance of coordination between logistics teams, clinical engineers and IT specialists during equipment installation and commissioning." },
+      { type: "p", text: "Misalignment between deliveries and installation schedules can increase operational costs, require additional service visits and delay customer readiness." },
+      { type: "h3", text: "New and less predictable order patterns" },
+      { type: "p", text: "Unlike recurring consumables orders, new instrument launches have limited historical demand data. Uncertainty around order volumes, delivery locations and shipment frequencies makes freight capacity planning and resource allocation more challenging." },
+      { type: "p", text: "The complexity of product launch logistics, therefore, extends beyond individual shipments. It lies in coordinating interdependent activities while maintaining continuity in existing distribution operations." },
+
+      { type: "h2", text: "When individual shipments succeed but the launch falls behind" },
+      { type: "p", text: "The complexity of instrument launch logistics increases when interdependent activities are managed across separate systems, teams and logistics partners. Even when individual shipments meet their delivery commitments, the overall launch can fall behind." },
+      { type: "h3", text: "Fragmented information across systems and logistics partners" },
+      { type: "p", text: "Customer orders may reside in the ERP, inventory and dispatch information with third-party logistics providers (3PLs), shipment updates with carriers and installation schedules in field service systems. Without connected information, teams may struggle to identify how a change in one activity affects another." },
+      { type: "h3", text: "Disconnected decisions across teams" },
+      { type: "p", text: "Logistics, order management and field service teams operate with different responsibilities and priorities. A revised shipment arrival date may not be reflected in the installation schedule. Identifying these conflicts and coordinating a response can require multiple manual checks and hand-offs." },
+      { type: "h3", text: "Consequences of misaligned deliveries and installation schedules" },
+      { type: "p", text: "An instrument may arrive on time, but delayed cartridges or unavailable engineers can postpone commissioning. Such misalignment can lead to additional storage costs, premium freight expenditure, repeated service visits and delayed customer readiness." },
+      { type: "figure", src: launch("launch-timeline"), alt: "Timeline of one instrument launch: the instrument is delivered Monday, cartridges slip to Thursday and the Tuesday engineer visit is wasted, delaying customer readiness by three days.", width: 2400, height: 1350 },
+      { type: "p", text: "The challenge, therefore, is not simply tracking individual shipments. It is understanding their dependencies and coordinating decisions across systems and teams as operational conditions change." },
+
+      { type: "h2", text: "How orchestration agents connect instrument launch logistics" },
+      { type: "p", text: "A change in one shipment can affect several activities during an instrument launch. Orchestration agents help manage these dependencies by connecting operational information, assessing the impact of changes and coordinating responses across existing systems." },
+      { type: "h3", text: "Connect orders, shipments and installation schedules" },
+      { type: "p", text: "Agentra connects ERP systems, 3PLs, carriers and field service systems through supported integrations. Its business ontology links customer orders, instruments, cartridges, shipments and installation appointments." },
+      { type: "p", text: "This shared operational context allows agents to understand which deliveries and appointments are associated with each customer order." },
+      { type: "figure", src: launch("launch-ontology"), alt: "Business ontology for an instrument launch: one customer order linked to instrument, cartridge, shipment, installation, engineer and site records across systems, with a cartridge and installation date conflict flagged.", width: 2400, height: 1350 },
+      { type: "h3", text: "Detect conflicts before they disrupt the launch" },
+      { type: "p", text: "Agents monitor inventory availability, shipment updates and installation schedules. When a shipment's expected arrival date changes, they assess the impact on dependent activities." },
+      { type: "p", text: "For instance, if cartridges are expected to arrive after the scheduled installation, agents identify the affected customer order and flag the scheduling conflict before an unnecessary service visit occurs." },
+      { type: "h3", text: "Evaluate coordinated alternatives" },
+      { type: "p", text: "Agents investigate available options to resolve the conflict. They can check cartridge availability at alternative warehouses, assess expedited freight options or evaluate revised installation dates." },
+      { type: "p", text: "Each option is assessed against freight costs, inventory availability, customer commitments and operational constraints. This helps teams select a response that protects the overall launch schedule rather than optimising an individual shipment at the expense of other activities." },
+      { type: "h3", text: "Execute authorised changes across existing systems" },
+      { type: "p", text: "Once a decision is authorised, agents can initiate the corresponding actions through connected systems. These may include reallocating inventory, revising freight bookings, updating delivery schedules and notifying field service teams." },
+      { type: "p", text: "Agents continue monitoring operational updates to identify further conflicts. All actions remain subject to defined permissions, business rules and approval requirements." },
+      { type: "p", text: "Through agentic orchestration, product launch logistics becomes a more coordinated process, where changes in one activity inform decisions across related operations." },
+
+      { type: "h2", text: "Where people stay in control" },
+      { type: "p", text: "Not every decision in instrument launch logistics requires the same level of human involvement. Routine adjustments may be suitable for automation, while decisions involving additional expenditure, customer commitments or quality-sensitive requirements may require human approval." },
+      { type: "p", text: "Agentra supports three operating modes to accommodate different levels of autonomy:" },
+      {
+        type: "list",
+        items: [
+          "**Suggest:** Agents evaluate alternatives and recommend actions for teams to review and implement.",
+          "**Co-pilot:** Agents prepare operational changes and execute them following human approval.",
+          "**Autopilot:** Agents execute eligible actions within predefined business rules and permissions, escalating exceptions when required.",
+        ],
+      },
+      { type: "p", text: "For example, an agent may recommend expedited freight to protect an installation schedule. If the additional cost exceeds an authorised spending limit, the decision is routed to the appropriate person for approval." },
+      { type: "p", text: "Defined guardrails, role-based permissions and escalation rules establish which decisions agents can make and where human intervention is required. Audit trails maintain a traceable record of recommendations, approvals and executed actions." },
+      { type: "p", text: "This allows manufacturers to accelerate logistics decisions while retaining operational control and accountability." },
+
+      { type: "h2", text: "Conclusion" },
+      { type: "p", text: "Delivering an instrument on time is only one part of a successful launch. Cartridge availability, shipment schedules and installation appointments also need to remain aligned." },
+      { type: "p", text: "Agentra helps manufacturers coordinate these activities across existing systems, respond to disruptions and execute authorised decisions while keeping people in control." },
+      { type: "p", text: "**Agents that act. People in command.**" },
+      { type: "cta", text: "**[Book a 30-minute architecture review](/contact)** to explore how Agentra can support your instrument launch logistics." },
+    ],
+  },
   {
     slug: "continuous-sop-consumer-electronics",
     title: "Continuous S&OP for Consumer Electronics: Why It Matters",
