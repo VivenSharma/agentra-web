@@ -42,8 +42,119 @@ const rights = (name: string) => `/blog/decision-rights-agentic-supply-chain/${n
 const freight = (name: string) => `/blog/inbound-freight-management-agentic-ai/${name}.png`;
 const fresh = (name: string) => `/blog/daily-demand-sensing-store-replenishment/${name}.png`;
 const audit = (name: string) => `/blog/freight-bill-auditing-india/${name}.jpg`;
+const sop = (name: string) => `/blog/continuous-sop-consumer-electronics/${name}.jpg`;
 
 export const articles: Article[] = [
+  {
+    slug: "continuous-sop-consumer-electronics",
+    title: "Continuous S&OP for Consumer Electronics: Why It Matters",
+    description:
+      "Discover how continuous S&OP and agentic AI help consumer electronics brands respond to demand shifts, align supply plans and make timely decisions.",
+    dek: "Discover how continuous S&OP and agentic AI help consumer electronics brands respond to demand shifts, align supply plans and make timely decisions.",
+    readMins: 5,
+    cover: {
+      src: sop("cover"),
+      alt: "Agentic AI in S&OP: smartwatch demand rising and headphone demand falling run through demand and supply agents to one coordinated planner approval, then execution.",
+      width: 2400,
+      height: 1350,
+    },
+    body: [
+      { type: "p", text: "A consumer electronics brand enters the month with plans to increase headphone production. A week later, a smartwatch gains unexpected popularity on social media, while headphone sales fall below expectations." },
+      { type: "p", text: "But component orders have already been placed, supplier capacity committed and production schedules finalised. Revising the demand forecast is one thing. Adjusting the supply commitments behind it is another." },
+      { type: "p", text: "According to Capgemini Research Institute’s November 2026 research, **[77% of consumer goods organisations identify forecasting uncertainty driven by changing consumer behaviour as a major supply chain challenge.](https://www.capgemini.com/wp-content/uploads/2026/11/Resilient-by-design-supply-chain-agentic-ai-report.pdf)**" },
+      { type: "p", text: "For fast-growing consumer electronics brands, the challenge is not simply creating a reliable monthly S&OP plan. It is keeping demand and supply aligned as market conditions change between planning cycles. This is where **continuous S&OP** becomes critical." },
+
+      { type: "h2", text: "Why monthly S&OP struggles to keep pace with consumer electronics" },
+      { type: "p", text: "Expanding product portfolios, shorter product lifecycles and long sourcing lead times make the **consumer electronics supply chain** increasingly complex. These challenges make it difficult for monthly S&OP plans to remain aligned with changing market demand." },
+      { type: "h3", text: "Expanding product portfolios" },
+      { type: "p", text: "As product portfolios expand, so does planning complexity. Each SKU introduces different demand patterns, component requirements and supply constraints." },
+      { type: "h3", text: "Shorter product lifecycles" },
+      { type: "p", text: "Frequent product launches and shifting consumer preferences shorten the window for selling products. Delayed planning decisions can lead to excess inventory, obsolescence and missed sales opportunities." },
+      { type: "h3", text: "Long China-to-India sourcing lead times" },
+      { type: "p", text: "By the time demand changes, components may already be ordered, in production or in transit. These existing supply commitments limit the flexibility to adjust procurement and production plans." },
+      { type: "p", text: "Together, these challenges reinforce the need for **continuous S&OP**, where demand and supply plans are reassessed as market conditions change." },
+      { type: "h3", text: "When demand changes, what happens to the existing S&OP plan?" },
+      { type: "p", text: "Rising smartwatch demand and falling headphone sales create two opposing challenges: meeting unexpected demand and managing excess supply." },
+      { type: "p", text: "The impact extends well beyond demand planning." },
+      {
+        type: "table",
+        head: ["Planning function", "Rising smartwatch demand", "Falling headphone demand"],
+        rows: [
+          ["Inventory", "Risk of stockouts", "Excess inventory"],
+          ["Procurement", "Additional component requirements", "Open POs requiring reassessment"],
+          ["Production", "Increased output requirements", "Reduced or rescheduled production"],
+          ["Logistics", "Potential need for expedited shipments", "Potentially unused freight capacity"],
+          ["Finance", "Additional costs and revenue opportunities", "Working capital tied up in inventory"],
+        ],
+      },
+      { type: "p", text: "Revising the forecast alone does not resolve these challenges. Each adjustment requires coordinated decisions across planning functions." },
+      { type: "p", text: "McKinsey’s 2024 Global Supply Chain Leader Survey found that companies take an [average of two weeks to plan and execute a response to a supply chain disruption.](https://www.mckinsey.com/capabilities/operations/our-insights/supply-chain-risk-survey-2024)" },
+      { type: "p", text: "**Demand may change overnight, but supply commitments cannot.**" },
+
+      { type: "h2", text: "What continuous S&OP means in practice" },
+      { type: "p", text: "**Continuous S&OP** extends planning beyond the monthly cycle. It enables organisations to monitor changing demand and supply conditions, identify significant deviations and reassess existing commitments before they become costly." },
+      { type: "p", text: "In practice, this involves:" },
+      {
+        type: "list",
+        items: [
+          "Monitoring demand and supply conditions continuously.",
+          "Identifying deviations that require intervention.",
+          "Assessing their impact on existing supply commitments.",
+          "Coordinating decisions across functions between formal planning cycles.",
+        ],
+      },
+      { type: "p", text: "Monthly S&OP reviews remain essential for strategic alignment, financial planning and governance." },
+      { type: "p", text: "**Continuous S&OP is not about constantly changing the plan. It is about knowing when the plan needs to change and acting before the opportunity to respond is lost.**" },
+      { type: "figure", src: sop("sop-loop"), alt: "Continuous S&OP feedback loop with five stages: monitor, identify, assess, coordinate, and act and learn, running between monthly S&OP reviews.", width: 2400, height: 1350 },
+
+      { type: "h2", text: "How agentic AI enables continuous S&OP" },
+      { type: "p", text: "**Agentic AI in S&OP** connects demand sensing with supply planning, helping organisations translate market changes into timely, feasible decisions between formal S&OP cycles." },
+      { type: "h3", text: "Demand agents: From signals to insights" },
+      { type: "p", text: "Demand agents monitor sell-out data and external market signals to identify forecast deviations and investigate their underlying drivers." },
+      { type: "p", text: "For example, when smartwatch sales exceed expectations, a demand agent analyses sales trends, promotional activity and available market signals to assess whether the increase is likely to be temporary or sustained. It then recommends an appropriate forecast adjustment." },
+      { type: "h3", text: "Supply agents: From demand to feasibility" },
+      { type: "p", text: "A revised demand forecast does not guarantee that supply can meet it. Supply agents assess inventory levels, open purchase orders, supplier capacity, lead times and manufacturing constraints." },
+      { type: "p", text: "They evaluate alternative procurement and production scenarios to determine how much additional smartwatch demand can be fulfilled, how quickly and at what cost." },
+      { type: "h3", text: "Human planners: From recommendations to decisions" },
+      { type: "p", text: "Planners review the proposed scenarios, evaluate trade-offs between cost, product availability and profitability, and approve the most appropriate response." },
+      { type: "p", text: "Agents can then execute authorised changes within defined guardrails, with decisions and actions recorded in an audit trail." },
+      { type: "p", text: "**The value of agentic AI in S&OP lies not just in detecting demand changes earlier, but in translating them into feasible supply decisions while keeping people in control.**" },
+
+      { type: "h2", text: "How to measure the value of continuous S&OP" },
+      { type: "p", text: "The value of **continuous S&OP** extends beyond forecast accuracy. Responsiveness, product availability and inventory performance are equally important when evaluating planning effectiveness." },
+      { type: "p", text: "Organisations can use the following KPIs to assess the impact of continuous S&OP." },
+      {
+        type: "table",
+        head: ["Metric", "What it measures"],
+        rows: [
+          ["Forecast accuracy", "How closely forecasts align with actual demand"],
+          ["Forecast bias", "Consistent overestimation or underestimation of demand"],
+          ["Time to replan", "Time between identifying a significant change and revising the affected plan"],
+          ["Inventory obsolescence", "Inventory value lost due to ageing or declining demand"],
+          ["Product availability", "Ability to fulfil customer demand from available stock"],
+          ["Decision-to-action time", "Time between decision approval and implementation"],
+        ],
+      },
+      { type: "p", text: "Comparing these metrics before and after introducing agentic AI can help organisations assess whether faster planning translates into better operational and financial outcomes." },
+
+      { type: "h2", text: "Moving towards continuous S&OP: A phased approach" },
+      { type: "p", text: "Moving towards continuous S&OP does not require an immediate overhaul of existing planning processes. Organisations can adopt agentic AI in three phases." },
+      { type: "figure", src: sop("phased-roadmap"), alt: "Three-phase roadmap to continuous S&OP shown as towers built on existing systems: demand agents, then supply and production, then finance and cross-functional decisions.", width: 2400, height: 1350 },
+      { type: "h3", text: "Phase 1: Start with demand" },
+      { type: "p", text: "Introduce demand agents to monitor market signals, investigate forecast deviations and recommend adjustments." },
+      { type: "h3", text: "Phase 2: Connect demand with supply and production" },
+      { type: "p", text: "Extend agent capabilities to assess inventory, supplier capacity, component availability and production constraints against revised demand." },
+      { type: "h3", text: "Phase 3: Enable continuous S&OP" },
+      { type: "p", text: "Connect demand, supply, production and financial planning to support coordinated decisions between formal S&OP cycles." },
+      { type: "p", text: "Agentra supports this phased approach by enabling agents to work across existing enterprise systems, with defined guardrails, human approvals and audit trails." },
+
+      { type: "h2", text: "Conclusion: The market moves. Planning must keep up" },
+      { type: "p", text: "When smartwatch demand rises and headphone sales decline, businesses cannot afford to wait until the next planning cycle to assess their response." },
+      { type: "p", text: "**Continuous S&OP** is not about replacing monthly planning. It is about connecting **demand and supply planning** to enable timely, feasible and coordinated business decisions as market conditions change." },
+      { type: "p", text: "**Agents that act. People in command.**" },
+      { type: "cta", text: "**[Explore how Agentra can help you move towards continuous S&OP.](/contact)**" },
+    ],
+  },
   {
     slug: "freight-bill-auditing-india",
     title: "Freight Bill Auditing in India: Why Manufacturers Need to Check Every Invoice Before Payment",
